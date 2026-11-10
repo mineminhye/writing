@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>통계로 말하는 나의 의견</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#fff; --ink:#26303b; --sub:#66707c; --line:#dedad2;
+  --main:#2f6f8f; --main2:#e3f0f6; --pro:#2f8f5b; --con:#c2512f; --star:#e6a700;
+  --g:#2f8f5b; --y:#d29b00; --r:#c2512f; --home:#d7263d;
+}
+*{box-sizing:border-box}
+html{font-size:22px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Malgun Gothic','맑은 고딕','Apple SD Gothic Neo',sans-serif;line-height:1.55;word-break:keep-all}
+h1,h2,h3,.jua,button,.step{font-family:'Jua','Malgun Gothic',sans-serif;font-weight:400}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:2px solid var(--line)}
+.top{display:flex;align-items:center;gap:.6rem;padding:.5rem 1rem;flex-wrap:wrap}
+.top h1{margin:0;font-size:1.25rem;color:var(--main);flex:1;min-width:10rem}
+.who{font-size:.75rem;color:var(--sub)}
+.fs button{width:2.2rem;height:2.2rem;padding:0;font-size:.8rem}
+nav{display:flex;overflow-x:auto;gap:.3rem;padding:0 1rem .5rem}
+.step{flex:1 0 auto;border:2px solid var(--line);background:#fff;border-radius:999px;padding:.25rem .8rem;font-size:.85rem;color:var(--sub);cursor:pointer;white-space:nowrap}
+.step.on{background:var(--main);border-color:var(--main);color:#fff}
+.step.done{border-color:var(--main);color:var(--main)}
+main{max-width:1100px;margin:0 auto;padding:1rem 1rem 6rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:1rem 1.1rem;margin-bottom:1rem;box-shadow:0 2px 0 rgba(0,0,0,.03)}
+h2{font-size:1.35rem;margin:.1rem 0 .6rem;color:var(--main)}
+h3{font-size:1.1rem;margin:.2rem 0 .5rem}
+.lead{color:var(--sub);font-size:.85rem;margin:-.3rem 0 .8rem}
+button{font-size:.9rem;border:2px solid var(--main);background:#fff;color:var(--main);border-radius:12px;padding:.35rem .8rem;cursor:pointer;touch-action:manipulation}
+button.fill{background:var(--main);color:#fff}
+button:disabled{opacity:.4;cursor:default}
+button.mini{font-size:.75rem;padding:.15rem .5rem;border-radius:9px}
+input[type=text],input[type=number],textarea,select{font:inherit;font-size:.95rem;border:2px solid var(--line);border-radius:10px;padding:.35rem .55rem;width:100%;background:#fff;color:var(--ink)}
+textarea{min-height:5.5rem;resize:vertical;line-height:1.6}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--main)}
+label{font-size:.85rem;color:var(--sub)}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}}
+.dsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.7rem}
+.ds{border:2px solid var(--line);border-radius:16px;padding:.7rem .8rem;cursor:pointer;background:#fff}
+.ds.on{border-color:var(--main);background:var(--main2)}
+.ds b{font-family:'Jua';font-weight:400;font-size:1.05rem}
+.ds .no{display:inline-block;background:var(--main);color:#fff;border-radius:8px;padding:0 .45rem;margin-right:.3rem;font-family:'Jua'}
+.ds small{display:block;color:var(--sub);font-size:.75rem}
+.topic{border:2px solid var(--line);border-radius:16px;padding:.8rem .9rem;margin-bottom:.7rem;background:#fff}
+.topic.star{border-color:var(--star);background:#fffaf0}
+.topic .t{font-size:1.05rem;font-weight:700;margin:.2rem 0 .4rem}
+.badge{display:inline-block;font-size:.72rem;border-radius:999px;padding:.05rem .6rem;color:#fff;font-family:'Jua'}
+.badge.g{background:var(--g)}.badge.y{background:var(--y)}.badge.r{background:var(--r)}
+.hint{font-size:.8rem;color:var(--sub);margin:.1rem 0 .5rem}
+.pick button.on.pro{background:var(--pro);border-color:var(--pro);color:#fff}
+.pick button.on.con{background:var(--con);border-color:var(--con);color:#fff}
+.pick button.pro{border-color:var(--pro);color:var(--pro)}
+.pick button.con{border-color:var(--con);color:var(--con)}
+.starbtn{border-color:var(--star);color:#a77a00}
+.starbtn.on{background:var(--star);color:#fff}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;color:var(--sub);margin-bottom:.6rem}
+.chips{display:flex;gap:.35rem;flex-wrap:wrap;margin:.3rem 0}
+.chip{border:2px solid var(--line);border-radius:999px;padding:.1rem .65rem;font-size:.78rem;background:#fff;color:var(--ink);cursor:pointer;font-family:'Malgun Gothic',sans-serif}
+.chip.on{background:var(--main);border-color:var(--main);color:#fff}
+svg text{font-family:'Malgun Gothic',sans-serif}
+.plot{width:100%;background:#fff;border:1px solid var(--line);border-radius:12px;touch-action:manipulation}
+.rbox{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin:.6rem 0}
+.rnum{font-family:'Jua';font-size:1.8rem;color:var(--main)}
+.scale{position:relative;flex:1;min-width:14rem;height:2.6rem}
+.scale .bar{position:absolute;left:0;right:0;top:.5rem;height:.7rem;border-radius:9px;background:linear-gradient(90deg,#c2512f,#eee 50%,#2f6f8f)}
+.scale .mk{position:absolute;top:.15rem;width:4px;height:1.4rem;background:#222;border-radius:2px;transform:translateX(-2px);transition:left .3s}
+.scale .lb{position:absolute;top:1.35rem;font-size:.65rem;color:var(--sub);transform:translateX(-50%);white-space:nowrap}
+.info{background:#f2f7fa;border-radius:12px;padding:.5rem .8rem;font-size:.85rem;min-height:2.6rem}
+table{border-collapse:collapse;width:100%;font-size:.82rem}
+th,td{border:1px solid var(--line);padding:.3rem .4rem;text-align:center}
+th{background:#f1efe9;font-weight:700}
+td.l{text-align:left}
+.tbl-wrap{max-height:22rem;overflow:auto;border-radius:10px}
+.basket{background:#fffaf0;border:2px dashed var(--star);border-radius:14px;padding:.6rem .8rem}
+.bitem{display:flex;gap:.4rem;align-items:flex-start;font-size:.82rem;padding:.3rem 0;border-bottom:1px dashed #ecd9a6}
+.bitem:last-child{border-bottom:0}
+.bitem span{flex:1}
+.para{border-left:6px solid var(--main);padding-left:.8rem}
+.pnum{display:inline-block;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--main);color:#fff;text-align:center;font-family:'Jua';line-height:1.7rem;margin-right:.3rem}
+.q{font-size:.9rem;color:var(--sub);margin:.1rem 0 .5rem}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media (max-width:820px){.fields{grid-template-columns:1fr}}
+.limits{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:.5rem 0}
+@media (max-width:820px){.limits{grid-template-columns:1fr 1fr}}
+.lcard{perspective:800px;height:9.5rem;cursor:pointer}
+.lin{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.lcard.flip .lin{transform:rotateY(180deg)}
+.lf,.lb2{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:.6rem;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.lf{background:var(--main);color:#fff;font-family:'Jua';font-size:1.3rem}
+.lf small{font-family:'Malgun Gothic';font-size:.65rem;opacity:.85}
+.lb2{background:#fff;border:2px solid var(--main);transform:rotateY(180deg);font-size:.72rem;line-height:1.4;justify-content:flex-start;overflow:auto}
+.lb2 b{color:var(--main);font-size:.8rem}
+.lcard.sel .lf{background:var(--star)}
+.lcard.sel .lb2{border-color:var(--star)}
+.cmp{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;background:#f7f5f0;border-radius:12px;padding:.5rem .8rem;font-size:.9rem}
+.frames{display:flex;flex-direction:column;gap:.35rem;margin:.4rem 0}
+.frame{text-align:left;font-family:'Malgun Gothic',sans-serif;font-size:.82rem;border:2px dashed var(--main);border-radius:10px;padding:.3rem .6rem;background:#fbfdfe}
+.checks{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem}
+.ck{font-size:.75rem;border-radius:999px;padding:.05rem .6rem;background:#eee;color:#777}
+.ck.ok{background:#e1f3e8;color:#23784a}
+.ref{background:#f7f5f0;border-radius:12px;padding:.5rem .8rem;font-size:.85rem;margin-bottom:.5rem}
+.ref b{color:var(--main)}
+details.ai{border:2px solid #b9a6e0;border-radius:14px;padding:.4rem .8rem;background:#faf8ff;margin-bottom:1rem}
+details.ai summary{cursor:pointer;font-family:'Jua';color:#6a4fb0;font-size:1rem}
+.prompt{background:#fff;border:1px solid #ddd3f3;border-radius:10px;padding:.45rem .6rem;margin:.4rem 0;font-size:.8rem;display:flex;gap:.5rem;align-items:flex-start}
+.prompt span{flex:1}
+.essay-out{font-size:1rem;line-height:1.9;white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:1rem 1.2rem}
+.count{font-family:'Jua';font-size:1.2rem}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:2px solid var(--line);padding:.5rem 1rem;display:flex;justify-content:space-between;z-index:20}
+.bottom button{font-size:1rem;padding:.4rem 1.2rem}
+.toast{position:fixed;left:50%;bottom:5rem;transform:translateX(-50%);background:#26303b;color:#fff;border-radius:999px;padding:.4rem 1rem;font-size:.85rem;opacity:0;transition:opacity .3s;z-index:50;pointer-events:none}
+.toast.show{opacity:1}
+.warn{color:var(--con);font-size:.8rem}
+.muted{color:var(--sub);font-size:.8rem}
+#printArea{display:none}
+@media print{
+  header,main,.bottom,.toast{display:none!important}
+  #printArea{display:block;font-size:12pt;padding:0 1cm}
+  #printArea h1{font-size:16pt;margin:0 0 .2cm}
+  #printArea .pp{line-height:1.8;margin:.2cm 0;white-space:pre-wrap}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>📊 통계로 말하는 나의 의견</h1>
+    <span class="who" id="who"></span>
+    <span class="fs row"><button onclick="fontStep(-2)" title="글자 작게">가-</button><button onclick="fontStep(2)" title="글자 크게">가+</button></span>
+  </div>
+  <nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<div class="bottom"><button id="prevBtn" onclick="go(step-1)">◀ 이전</button><button id="nextBtn" class="fill" onclick="go(step+1)">다음 ▶</button></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ===== 선생님 설정 =====
+   Apps Script 웹 앱 주소(…/exec)를 따옴표 안에 붙여 넣으세요. 비워 두면 AI 버튼이 꺼져요. */
+const AI_URL = '';
+const AI_LIMIT = 3;   // 단계마다 학생 1명이 AI 피드백을 받을 수 있는 횟수
+/* ======================== */
+const DATA = [{"id":1,"title":"PISA 나라별 자료","sub":"SNS·게임·AI와 성적","unit":"나라","groups":{"oecd":["OECD",{"1":"OECD 회원","2":"비회원"}]},"vars":{"read":["읽기 평균","점"],"math":["수학 평균","점"],"sci":["과학 평균","점"],"game":["여가 게임 하루 1시간 초과","%"],"sns":["여가 SNS 하루 1시간 초과","%"],"ai":["공부에 AI 활용 지수",""]},"x":"sns","y":"read","home":"대한민국","rows":[{"name":"과테말라","oecd":"2","read":337.1,"math":334.3,"sci":351.2,"game":null,"sns":null,"ai":0.2},{"name":"그리스","oecd":"1","read":422.7,"math":423.9,"sci":434.3,"game":53.0,"sns":79.6,"ai":-0.14},{"name":"네덜란드","oecd":"1","read":441.3,"math":483.3,"sci":485.5,"game":57.8,"sns":80.9,"ai":-0.1},{"name":"노르웨이","oecd":"1","read":452.8,"math":451.8,"sci":470.2,"game":null,"sns":null,"ai":0.06},{"name":"뉴질랜드","oecd":"1","read":497.0,"math":479.6,"sci":509.4,"game":62.4,"sns":79.3,"ai":-0.07},{"name":"대만","oecd":"2","read":507.8,"math":546.2,"sci":539.7,"game":65.7,"sns":74.9,"ai":-0.2},{"name":"대한민국","oecd":"1","read":500.6,"math":522.3,"sci":526.1,"game":59.9,"sns":76.1,"ai":0.17},{"name":"덴마크","oecd":"1","read":460.0,"math":470.6,"sci":477.5,"game":null,"sns":null,"ai":0.01},{"name":"도미니카공화국","oecd":"2","read":345.5,"math":338.8,"sci":360.8,"game":48.8,"sns":65.5,"ai":0.3},{"name":"독일","oecd":"1","read":465.3,"math":463.8,"sci":485.5,"game":52.4,"sns":79.2,"ai":0.1},{"name":"라트비아","oecd":"1","read":429.7,"math":460.5,"sci":468.4,"game":null,"sns":null,"ai":0.13},{"name":"레바논","oecd":"2","read":330.9,"math":377.1,"sci":372.0,"game":64.5,"sns":74.6,"ai":0.22},{"name":"루마니아","oecd":"2","read":412.9,"math":419.1,"sci":424.7,"game":56.1,"sns":77.3,"ai":0.12},{"name":"룩셈부르크","oecd":"1","read":443.2,"math":458.1,"sci":473.8,"game":50.0,"sns":80.1,"ai":0.05},{"name":"르완다","oecd":"2","read":300.9,"math":311.6,"sci":317.3,"game":null,"sns":null,"ai":null},{"name":"리투아니아","oecd":"1","read":464.1,"math":470.5,"sci":487.7,"game":null,"sns":null,"ai":0.14},{"name":"마카오","oecd":"2","read":501.1,"math":549.3,"sci":540.8,"game":71.1,"sns":79.1,"ai":0.32},{"name":"말레이시아","oecd":"2","read":392.8,"math":397.4,"sci":419.2,"game":62.8,"sns":77.8,"ai":0.24},{"name":"멕시코","oecd":"1","read":407.9,"math":387.6,"sci":413.6,"game":null,"sns":null,"ai":0.16},{"name":"모로코","oecd":"2","read":321.1,"math":354.8,"sci":358.0,"game":41.0,"sns":58.7,"ai":0.05},{"name":"모리셔스","oecd":"2","read":405.3,"math":406.9,"sci":438.2,"game":null,"sns":null,"ai":null},{"name":"몬테네그로","oecd":"2","read":418.4,"math":411.1,"sci":435.2,"game":null,"sns":null,"ai":0.01},{"name":"몰도바","oecd":"2","read":403.7,"math":410.1,"sci":421.9,"game":null,"sns":null,"ai":0.17},{"name":"몰타","oecd":"2","read":414.6,"math":439.1,"sci":452.5,"game":null,"sns":null,"ai":0.23},{"name":"몽골","oecd":"2","read":374.3,"math":418.6,"sci":424.0,"game":55.5,"sns":75.2,"ai":0.24},{"name":"미국","oecd":"1","read":489.5,"math":462.8,"sci":501.6,"game":63.8,"sns":80.3,"ai":-0.3},{"name":"베트남","oecd":"2","read":391.5,"math":443.2,"sci":457.4,"game":null,"sns":null,"ai":0.43},{"name":"벨기에","oecd":"1","read":466.3,"math":479.7,"sci":489.7,"game":49.9,"sns":83.4,"ai":-0.05},{"name":"북마케도니아","oecd":"2","read":357.4,"math":379.8,"sci":378.5,"game":null,"sns":null,"ai":0.13},{"name":"불가리아","oecd":"2","read":386.6,"math":405.1,"sci":420.8,"game":57.2,"sns":75.9,"ai":0.04},{"name":"브라질","oecd":"2","read":408.0,"math":376.8,"sci":408.5,"game":null,"sns":null,"ai":0.09},{"name":"브루나이","oecd":"2","read":425.7,"math":435.2,"sci":439.5,"game":68.2,"sns":82.6,"ai":0.2},{"name":"사우디아라비아","oecd":"2","read":387.3,"math":389.9,"sci":413.4,"game":null,"sns":null,"ai":0.39},{"name":"세르비아","oecd":"2","read":414.6,"math":416.7,"sci":429.0,"game":null,"sns":null,"ai":0.21},{"name":"스웨덴","oecd":"1","read":466.4,"math":464.3,"sci":485.1,"game":null,"sns":null,"ai":-0.09},{"name":"스위스","oecd":"1","read":470.1,"math":499.1,"sci":501.2,"game":45.5,"sns":80.0,"ai":0.21},{"name":"스페인","oecd":"1","read":451.4,"math":457.4,"sci":477.1,"game":44.9,"sns":80.4,"ai":0.22},{"name":"슬로바키아","oecd":"1","read":448.0,"math":469.1,"sci":474.9,"game":null,"sns":null,"ai":0.07},{"name":"슬로베니아","oecd":"1","read":444.7,"math":459.8,"sci":483.7,"game":49.7,"sns":78.3,"ai":0.08},{"name":"싱가포르","oecd":"2","read":534.9,"math":562.9,"sci":559.9,"game":58.4,"sns":81.3,"ai":0.37},{"name":"아랍에미리트","oecd":"2","read":432.8,"math":452.6,"sci":458.1,"game":57.4,"sns":75.5,"ai":0.55},{"name":"아르메니아","oecd":"2","read":348.3,"math":375.8,"sci":368.6,"game":null,"sns":null,"ai":0.21},{"name":"아르헨티나","oecd":"2","read":388.7,"math":366.8,"sci":392.9,"game":57.2,"sns":76.9,"ai":0.24},{"name":"아이슬란드","oecd":"1","read":422.3,"math":449.7,"sci":441.4,"game":50.5,"sns":83.5,"ai":-0.09},{"name":"아일랜드","oecd":"1","read":500.4,"math":479.9,"sci":499.6,"game":51.4,"sns":84.5,"ai":-0.48},{"name":"아제르바이잔","oecd":"2","read":373.6,"math":422.4,"sci":408.6,"game":null,"sns":null,"ai":0.2},{"name":"알바니아","oecd":"2","read":407.6,"math":432.8,"sci":434.6,"game":null,"sns":null,"ai":0.26},{"name":"에스토니아","oecd":"1","read":499.2,"math":507.9,"sci":527.1,"game":58.0,"sns":81.5,"ai":0.02},{"name":"에콰도르","oecd":"2","read":385.0,"math":365.8,"sci":393.4,"game":null,"sns":null,"ai":0.28},{"name":"엘살바도르","oecd":"2","read":366.4,"math":346.2,"sci":384.7,"game":null,"sns":null,"ai":0.06},{"name":"영국","oecd":"1","read":494.2,"math":487.6,"sci":511.4,"game":63.9,"sns":86.1,"ai":-0.47},{"name":"오스트리아","oecd":"1","read":467.2,"math":477.2,"sci":496.9,"game":47.3,"sns":81.7,"ai":0.11},{"name":"요르단","oecd":"2","read":362.6,"math":387.6,"sci":406.9,"game":55.9,"sns":66.4,"ai":0.05},{"name":"우루과이","oecd":"2","read":423.2,"math":404.9,"sci":444.5,"game":64.1,"sns":84.7,"ai":0.32},{"name":"우즈베키스탄","oecd":"2","read":null,"math":null,"sci":437.6,"game":null,"sns":null,"ai":0.29},{"name":"우크라이나(일부 지역)","oecd":"2","read":418.4,"math":431.0,"sci":448.1,"game":59.0,"sns":76.7,"ai":0.31},{"name":"이라크(쿠르디스탄 지역)","oecd":"2","read":311.5,"math":338.8,"sci":352.2,"game":null,"sns":null,"ai":null},{"name":"이스라엘","oecd":"1","read":435.8,"math":433.4,"sci":442.0,"game":60.5,"sns":76.7,"ai":0.2},{"name":"이탈리아","oecd":"1","read":474.3,"math":467.8,"sci":483.0,"game":50.5,"sns":83.0,"ai":0.15},{"name":"인도네시아","oecd":"2","read":365.2,"math":363.9,"sci":388.7,"game":null,"sns":null,"ai":0.13},{"name":"일본","oecd":"1","read":502.7,"math":525.4,"sci":537.6,"game":56.6,"sns":70.5,"ai":-0.69},{"name":"잠비아","oecd":"2","read":324.9,"math":313.6,"sci":337.0,"game":null,"sns":null,"ai":null},{"name":"조지아","oecd":"2","read":384.2,"math":416.4,"sci":422.1,"game":52.9,"sns":76.5,"ai":0.02},{"name":"중국(베이징·상하이·장쑤·저장)","oecd":"2","read":526.5,"math":612.4,"sci":597.0,"game":27.8,"sns":26.4,"ai":-0.28},{"name":"체코","oecd":"1","read":468.4,"math":477.1,"sci":490.3,"game":null,"sns":null,"ai":0.02},{"name":"칠레","oecd":"1","read":435.7,"math":402.6,"sci":442.4,"game":null,"sns":null,"ai":0.21},{"name":"카자흐스탄","oecd":"2","read":384.8,"math":413.7,"sci":419.5,"game":null,"sns":null,"ai":0.23},{"name":"카타르","oecd":"2","read":418.0,"math":416.2,"sci":434.4,"game":60.1,"sns":74.0,"ai":0.14},{"name":"캄보디아","oecd":"2","read":347.2,"math":365.8,"sci":381.9,"game":null,"sns":null,"ai":null},{"name":"캐나다","oecd":"1","read":489.8,"math":485.3,"sci":510.1,"game":null,"sns":null,"ai":-0.3},{"name":"케냐","oecd":"2","read":320.2,"math":325.9,"sci":334.9,"game":null,"sns":null,"ai":0.1},{"name":"코소보","oecd":"2","read":340.5,"math":350.4,"sci":357.0,"game":null,"sns":null,"ai":0.2},{"name":"코스타리카","oecd":"1","read":416.0,"math":387.1,"sci":424.0,"game":null,"sns":null,"ai":0.2},{"name":"콜롬비아","oecd":"1","read":399.3,"math":380.5,"sci":413.7,"game":null,"sns":null,"ai":0.34},{"name":"크로아티아","oecd":"2","read":453.4,"math":455.3,"sci":476.3,"game":null,"sns":null,"ai":0.1},{"name":"키르기스스탄","oecd":"2","read":344.4,"math":363.8,"sci":362.5,"game":null,"sns":null,"ai":0.28},{"name":"키프로스","oecd":"2","read":379.4,"math":411.8,"sci":411.2,"game":null,"sns":null,"ai":0.0},{"name":"타지키스탄(두샨베)","oecd":"2","read":368.1,"math":382.1,"sci":333.8,"game":null,"sns":null,"ai":null},{"name":"태국","oecd":"2","read":391.8,"math":406.8,"sci":432.2,"game":null,"sns":null,"ai":0.38},{"name":"튀르키예","oecd":"1","read":472.1,"math":461.5,"sci":494.3,"game":59.1,"sns":79.1,"ai":0.31},{"name":"파라과이","oecd":"2","read":352.2,"math":333.7,"sci":355.2,"game":null,"sns":null,"ai":0.12},{"name":"팔레스타인","oecd":"2","read":349.9,"math":354.3,"sci":358.7,"game":null,"sns":null,"ai":0.11},{"name":"페루","oecd":"2","read":390.1,"math":382.4,"sci":405.6,"game":null,"sns":null,"ai":0.28},{"name":"포르투갈","oecd":"1","read":462.0,"math":459.9,"sci":481.7,"game":null,"sns":null,"ai":0.16},{"name":"폴란드","oecd":"1","read":481.5,"math":484.1,"sci":495.1,"game":56.0,"sns":75.6,"ai":0.22},{"name":"프랑스","oecd":"1","read":456.3,"math":457.7,"sci":483.4,"game":null,"sns":null,"ai":-0.13},{"name":"핀란드","oecd":"1","read":474.3,"math":468.7,"sci":504.4,"game":57.6,"sns":86.9,"ai":-0.35},{"name":"필리핀","oecd":"2","read":366.9,"math":370.6,"sci":373.3,"game":null,"sns":null,"ai":0.3},{"name":"헝가리","oecd":"1","read":452.3,"math":459.5,"sci":479.9,"game":58.6,"sns":79.3,"ai":-0.13},{"name":"호주","oecd":"1","read":490.9,"math":477.5,"sci":509.1,"game":57.2,"sns":77.4,"ai":0.03},{"name":"홍콩","oecd":"2","read":480.1,"math":521.7,"sci":495.6,"game":76.0,"sns":78.4,"ai":0.24}]},{"id":2,"title":"PISA 공부시간 · 삶의 만족도","sub":"숙제 시간과 행복","unit":"나라","groups":{"oecd":["OECD",{"1":"OECD 회원","2":"비회원"}]},"vars":{"hw":["하루 숙제 시간(모든 과목)","분"],"life":["삶의 만족도(0~10점)","점"],"math":["수학 평균","점"]},"x":"hw","y":"life","home":"대한민국","rows":[{"name":"과테말라","oecd":"2","hw":111,"life":7.81,"math":334.3},{"name":"그리스","oecd":"1","hw":107,"life":7.16,"math":423.9},{"name":"네덜란드","oecd":"1","hw":71,"life":7.63,"math":483.3},{"name":"노르웨이","oecd":"1","hw":61,"life":null,"math":451.8},{"name":"뉴질랜드","oecd":"1","hw":71,"life":6.71,"math":479.6},{"name":"대만","oecd":"2","hw":82,"life":6.72,"math":546.2},{"name":"대한민국","oecd":"1","hw":113,"life":6.73,"math":522.3},{"name":"덴마크","oecd":"1","hw":54,"life":7.6,"math":470.6},{"name":"도미니카공화국","oecd":"2","hw":117,"life":8.01,"math":338.8},{"name":"독일","oecd":"1","hw":66,"life":6.83,"math":463.8},{"name":"라트비아","oecd":"1","hw":89,"life":7.23,"math":460.5},{"name":"레바논","oecd":"2","hw":133,"life":7.1,"math":377.1},{"name":"루마니아","oecd":"2","hw":107,"life":7.92,"math":419.1},{"name":"룩셈부르크","oecd":"1","hw":72,"life":7.17,"math":458.1},{"name":"르완다","oecd":"2","hw":165,"life":5.47,"math":311.6},{"name":"리투아니아","oecd":"1","hw":102,"life":7.32,"math":470.5},{"name":"마카오","oecd":"2","hw":91,"life":6.7,"math":549.3},{"name":"말레이시아","oecd":"2","hw":125,"life":7.38,"math":397.4},{"name":"멕시코","oecd":"1","hw":115,"life":7.99,"math":387.6},{"name":"모로코","oecd":"2","hw":134,"life":7.16,"math":354.8},{"name":"모리셔스","oecd":"2","hw":155,"life":6.1,"math":406.9},{"name":"몬테네그로","oecd":"2","hw":77,"life":7.95,"math":411.1},{"name":"몰도바","oecd":"2","hw":113,"life":7.68,"math":410.1},{"name":"몰타","oecd":"2","hw":113,"life":6.9,"math":439.1},{"name":"몽골","oecd":"2","hw":159,"life":7.83,"math":418.6},{"name":"미국","oecd":"1","hw":87,"life":null,"math":462.8},{"name":"베트남","oecd":"2","hw":127,"life":7.93,"math":443.2},{"name":"벨기에","oecd":"1","hw":89,"life":null,"math":479.7},{"name":"북마케도니아","oecd":"2","hw":93,"life":7.91,"math":379.8},{"name":"불가리아","oecd":"2","hw":103,"life":7.4,"math":405.1},{"name":"브라질","oecd":"2","hw":81,"life":7.63,"math":376.8},{"name":"브루나이","oecd":"2","hw":118,"life":6.09,"math":435.2},{"name":"사우디아라비아","oecd":"2","hw":76,"life":8.16,"math":389.9},{"name":"세르비아","oecd":"2","hw":78,"life":7.81,"math":416.7},{"name":"스웨덴","oecd":"1","hw":63,"life":null,"math":464.3},{"name":"스위스","oecd":"1","hw":59,"life":7.29,"math":499.1},{"name":"스페인","oecd":"1","hw":88,"life":7.58,"math":457.4},{"name":"슬로바키아","oecd":"1","hw":70,"life":7.28,"math":469.1},{"name":"슬로베니아","oecd":"1","hw":62,"life":7.0,"math":459.8},{"name":"싱가포르","oecd":"2","hw":118,"life":null,"math":562.9},{"name":"아랍에미리트","oecd":"2","hw":118,"life":7.15,"math":452.6},{"name":"아르메니아","oecd":"2","hw":116,"life":8.47,"math":375.8},{"name":"아르헨티나","oecd":"2","hw":100,"life":7.31,"math":366.8},{"name":"아이슬란드","oecd":"1","hw":66,"life":7.55,"math":449.7},{"name":"아일랜드","oecd":"1","hw":75,"life":6.88,"math":479.9},{"name":"아제르바이잔","oecd":"2","hw":150,"life":7.5,"math":422.4},{"name":"알바니아","oecd":"2","hw":134,"life":8.64,"math":432.8},{"name":"에스토니아","oecd":"1","hw":90,"life":7.42,"math":507.9},{"name":"에콰도르","oecd":"2","hw":142,"life":7.63,"math":365.8},{"name":"엘살바도르","oecd":"2","hw":114,"life":7.75,"math":346.2},{"name":"영국","oecd":"1","hw":86,"life":6.73,"math":487.6},{"name":"오스트리아","oecd":"1","hw":67,"life":7.11,"math":477.2},{"name":"요르단","oecd":"2","hw":111,"life":7.16,"math":387.6},{"name":"우루과이","oecd":"2","hw":87,"life":7.76,"math":404.9},{"name":"우즈베키스탄","oecd":"2","hw":129,"life":8.23,"math":null},{"name":"우크라이나(일부 지역)","oecd":"2","hw":115,"life":7.93,"math":431.0},{"name":"이라크(쿠르디스탄 지역)","oecd":"2","hw":145,"life":6.76,"math":338.8},{"name":"이스라엘","oecd":"1","hw":78,"life":7.82,"math":433.4},{"name":"이탈리아","oecd":"1","hw":126,"life":7.03,"math":467.8},{"name":"인도네시아","oecd":"2","hw":114,"life":8.01,"math":363.9},{"name":"일본","oecd":"1","hw":77,"life":7.18,"math":525.4},{"name":"잠비아","oecd":"2","hw":148,"life":6.07,"math":313.6},{"name":"조지아","oecd":"2","hw":134,"life":8.04,"math":416.4},{"name":"중국(베이징·상하이·장쑤·저장)","oecd":"2","hw":133,"life":7.15,"math":612.4},{"name":"체코","oecd":"1","hw":53,"life":6.82,"math":477.1},{"name":"칠레","oecd":"1","hw":88,"life":7.29,"math":402.6},{"name":"카자흐스탄","oecd":"2","hw":98,"life":8.63,"math":413.7},{"name":"카타르","oecd":"2","hw":92,"life":6.99,"math":416.2},{"name":"캄보디아","oecd":"2","hw":130,"life":7.78,"math":365.8},{"name":"캐나다","oecd":"1","hw":87,"life":null,"math":485.3},{"name":"케냐","oecd":"2","hw":134,"life":7.51,"math":325.9},{"name":"코소보","oecd":"2","hw":108,"life":7.95,"math":350.4},{"name":"코스타리카","oecd":"1","hw":119,"life":7.93,"math":387.1},{"name":"콜롬비아","oecd":"1","hw":134,"life":7.81,"math":380.5},{"name":"크로아티아","oecd":"2","hw":77,"life":8.0,"math":455.3},{"name":"키르기스스탄","oecd":"2","hw":106,"life":7.86,"math":363.8},{"name":"키프로스","oecd":"2","hw":89,"life":7.12,"math":411.8},{"name":"타지키스탄(두샨베)","oecd":"2","hw":109,"life":6.66,"math":382.1},{"name":"태국","oecd":"2","hw":105,"life":7.71,"math":406.8},{"name":"튀르키예","oecd":"1","hw":99,"life":6.23,"math":461.5},{"name":"파라과이","oecd":"2","hw":110,"life":7.89,"math":333.7},{"name":"팔레스타인","oecd":"2","hw":116,"life":7.15,"math":354.3},{"name":"페루","oecd":"2","hw":134,"life":7.16,"math":382.4},{"name":"포르투갈","oecd":"1","hw":76,"life":7.46,"math":459.9},{"name":"폴란드","oecd":"1","hw":83,"life":6.89,"math":484.1},{"name":"프랑스","oecd":"1","hw":80,"life":6.84,"math":457.7},{"name":"핀란드","oecd":"1","hw":46,"life":7.67,"math":468.7},{"name":"필리핀","oecd":"2","hw":117,"life":7.82,"math":370.6},{"name":"헝가리","oecd":"1","hw":74,"life":7.39,"math":459.5},{"name":"호주","oecd":"1","hw":71,"life":null,"math":477.5},{"name":"홍콩","oecd":"2","hw":92,"life":6.73,"math":521.7}]},{"id":4,"title":"소득 수준 · 난민 수용","sub":"잘사는 나라는 난민을 더 받을까","unit":"나라","groups":{"oecd":["OECD",{"1":"OECD 회원","2":"비회원"}],"cont":["대륙",{"1":"아프리카","2":"아시아","3":"유럽","4":"북아메리카","5":"남아메리카","6":"오세아니아"}]},"vars":{"gdp":["1인당 GDP","달러"],"ref":["인구 1,000명당 난민 수용(2024)","명"]},"x":"gdp","y":"ref","home":"대한민국","rows":[{"name":"가나","oecd":"2","cont":"1","gdp":2405,"ref":0.22},{"name":"가봉","oecd":"2","cont":"1","gdp":8219,"ref":0.07},{"name":"가이아나","oecd":"2","cont":"5","gdp":29884,"ref":0.03},{"name":"감비아","oecd":"2","cont":"1","gdp":909,"ref":1.44},{"name":"과테말라","oecd":"2","cont":"4","gdp":6150,"ref":0.07},{"name":"그리스","oecd":"1","cont":"3","gdp":24752,"ref":11.59},{"name":"기니","oecd":"2","cont":"1","gdp":1717,"ref":0.15},{"name":"기니비사우","oecd":"2","cont":"1","gdp":963,"ref":0.01},{"name":"나미비아","oecd":"2","cont":"1","gdp":4413,"ref":1.74},{"name":"나우루","oecd":"2","cont":"6","gdp":13422,"ref":0.42},{"name":"나이지리아","oecd":"2","cont":"1","gdp":807,"ref":0.41},{"name":"남아프리카공화국","oecd":"2","cont":"1","gdp":6253,"ref":1.11},{"name":"네덜란드","oecd":"1","cont":"3","gdp":68219,"ref":14.45},{"name":"네팔","oecd":"2","cont":"2","gdp":1447,"ref":0.66},{"name":"노르웨이","oecd":"1","cont":"3","gdp":86810,"ref":22.23},{"name":"뉴질랜드","oecd":"1","cont":"6","gdp":48747,"ref":0.4},{"name":"니제르","oecd":"2","cont":"1","gdp":723,"ref":13.68},{"name":"대한민국","oecd":"1","cont":"2","gdp":33121,"ref":0.08},{"name":"덴마크","oecd":"1","cont":"3","gdp":71852,"ref":16.43},{"name":"도미니카공화국","oecd":"2","cont":"4","gdp":10876,"ref":0.0},{"name":"도미니카연방","oecd":"2","cont":"4","gdp":10405,"ref":0.0},{"name":"독일","oecd":"1","cont":"3","gdp":55800,"ref":32.52},{"name":"라이베리아","oecd":"2","cont":"1","gdp":846,"ref":0.21},{"name":"라트비아","oecd":"1","cont":"3","gdp":23367,"ref":26.29},{"name":"러시아","oecd":"2","cont":"3","gdp":14889,"ref":0.07},{"name":"레바논","oecd":"2","cont":"2","gdp":3478,"ref":130.67},{"name":"레소토","oecd":"2","cont":"1","gdp":972,"ref":0.18},{"name":"루마니아","oecd":"2","cont":"3","gdp":20072,"ref":9.7},{"name":"룩셈부르크","oecd":"1","cont":"3","gdp":137516,"ref":14.95},{"name":"르완다","oecd":"2","cont":"1","gdp":1000,"ref":8.02},{"name":"리비아","oecd":"2","cont":"1","gdp":6318,"ref":27.14},{"name":"리투아니아","oecd":"1","cont":"3","gdp":29386,"ref":18.73},{"name":"리히텐슈타인","oecd":"2","cont":"3","gdp":207973,"ref":21.08},{"name":"마다가스카르","oecd":"2","cont":"1","gdp":545,"ref":0.0},{"name":"말라위","oecd":"2","cont":"1","gdp":602,"ref":1.64},{"name":"말레이시아","oecd":"2","cont":"2","gdp":11867,"ref":3.89},{"name":"말리","oecd":"2","cont":"1","gdp":1086,"ref":5.54},{"name":"멕시코","oecd":"1","cont":"4","gdp":14157,"ref":1.15},{"name":"모나코","oecd":"2","cont":"3","gdp":288004,"ref":0.44},{"name":"모로코","oecd":"2","cont":"1","gdp":3993,"ref":0.2},{"name":"모리셔스","oecd":"2","cont":"1","gdp":11872,"ref":0.01},{"name":"모리타니","oecd":"2","cont":"1","gdp":2121,"ref":30.02},{"name":"모잠비크","oecd":"2","cont":"1","gdp":647,"ref":0.16},{"name":"몬테네그로","oecd":"2","cont":"3","gdp":12936,"ref":29.24},{"name":"몰도바","oecd":"2","cont":"3","gdp":7618,"ref":44.79},{"name":"몰타","oecd":"2","cont":"3","gdp":42347,"ref":14.48},{"name":"몽골","oecd":"2","cont":"2","gdp":6692,"ref":0.0},{"name":"미국","oecd":"1","cont":"4","gdp":85810,"ref":1.26},{"name":"미얀마","oecd":"2","cont":"2","gdp":1359,"ref":0.0},{"name":"바레인","oecd":"2","cont":"2","gdp":30048,"ref":0.16},{"name":"바베이도스","oecd":"2","cont":"4","gdp":25365,"ref":0.02},{"name":"바하마","oecd":"2","cont":"4","gdp":39355,"ref":0.02},{"name":"방글라데시","oecd":"2","cont":"2","gdp":2593,"ref":5.79},{"name":"베냉","oecd":"2","cont":"1","gdp":1485,"ref":1.12},{"name":"베트남","oecd":"2","cont":"2","gdp":4717,"ref":0.0},{"name":"벨기에","oecd":"1","cont":"3","gdp":55723,"ref":15.64},{"name":"벨라루스","oecd":"2","cont":"3","gdp":8316,"ref":4.79},{"name":"벨리즈","oecd":"2","cont":"4","gdp":8430,"ref":0.69},{"name":"보스니아헤르체고비나","oecd":"2","cont":"3","gdp":8957,"ref":0.16},{"name":"보츠와나","oecd":"2","cont":"1","gdp":7695,"ref":0.32},{"name":"볼리비아","oecd":"2","cont":"5","gdp":4001,"ref":0.09},{"name":"부룬디","oecd":"2","cont":"1","gdp":154,"ref":6.34},{"name":"부르키나파소","oecd":"2","cont":"1","gdp":987,"ref":1.69},{"name":"북마케도니아","oecd":"2","cont":"3","gdp":9310,"ref":11.47},{"name":"불가리아","oecd":"2","cont":"3","gdp":17412,"ref":16.09},{"name":"브라질","oecd":"2","cont":"5","gdp":10280,"ref":1.21},{"name":"브루나이","oecd":"2","cont":"2","gdp":33418,"ref":0.0},{"name":"사우디아라비아","oecd":"2","cont":"2","gdp":32094,"ref":0.01},{"name":"세네갈","oecd":"2","cont":"1","gdp":1744,"ref":0.64},{"name":"세인트루시아","oecd":"2","cont":"4","gdp":14182,"ref":0.03},{"name":"세인트키츠네비스","oecd":"2","cont":"4","gdp":22771,"ref":0.11},{"name":"소말리아","oecd":"2","cont":"1","gdp":637,"ref":1.03},{"name":"솔로몬제도","oecd":"2","cont":"6","gdp":2149,"ref":0.0},{"name":"수단","oecd":"2","cont":"1","gdp":989,"ref":15.73},{"name":"수리남","oecd":"2","cont":"5","gdp":7431,"ref":0.04},{"name":"스리랑카","oecd":"2","cont":"2","gdp":4516,"ref":0.01},{"name":"스웨덴","oecd":"1","cont":"3","gdp":57723,"ref":15.37},{"name":"스위스","oecd":"1","cont":"3","gdp":103670,"ref":21.99},{"name":"스페인","oecd":"1","cont":"3","gdp":35298,"ref":8.96},{"name":"슬로바키아","oecd":"1","cont":"3","gdp":26148,"ref":26.2},{"name":"슬로베니아","oecd":"1","cont":"3","gdp":34089,"ref":5.91},{"name":"시리아","oecd":"2","cont":"2","gdp":847,"ref":0.47},{"name":"시에라리온","oecd":"2","cont":"1","gdp":873,"ref":0.0},{"name":"싱가포르","oecd":"2","cont":"2","gdp":90674,"ref":0.0},{"name":"아랍에미리트","oecd":"2","cont":"2","gdp":49378,"ref":0.12},{"name":"아루바","oecd":"2","cont":"4","gdp":33985,"ref":0.0},{"name":"아르메니아","oecd":"2","cont":"2","gdp":8501,"ref":48.55},{"name":"아르헨티나","oecd":"2","cont":"5","gdp":13858,"ref":0.1},{"name":"아이슬란드","oecd":"1","cont":"3","gdp":82704,"ref":20.03},{"name":"아이티","oecd":"2","cont":"4","gdp":2142,"ref":0.0},{"name":"아일랜드","oecd":"1","cont":"3","gdp":107316,"ref":23.74},{"name":"아제르바이잔","oecd":"2","cont":"2","gdp":7284,"ref":0.62},{"name":"아프가니스탄","oecd":"2","cont":"2","gdp":414,"ref":0.49},{"name":"알바니아","oecd":"2","cont":"3","gdp":10012,"ref":3.36},{"name":"알제리","oecd":"2","cont":"1","gdp":5631,"ref":3.92},{"name":"앙골라","oecd":"2","cont":"1","gdp":2122,"ref":0.67},{"name":"앤티가바부다","oecd":"2","cont":"4","gdp":23726,"ref":0.0},{"name":"에스와티니","oecd":"2","cont":"1","gdp":3936,"ref":1.04},{"name":"에스토니아","oecd":"1","cont":"3","gdp":31170,"ref":31.07},{"name":"에콰도르","oecd":"2","cont":"5","gdp":6875,"ref":1.28},{"name":"에티오피아","oecd":"2","cont":"1","gdp":1011,"ref":7.64},{"name":"엘살바도르","oecd":"2","cont":"4","gdp":5580,"ref":0.02},{"name":"영국","oecd":"1","cont":"3","gdp":52637,"ref":7.46},{"name":"예멘","oecd":"2","cont":"2","gdp":433,"ref":1.15},{"name":"오만","oecd":"2","cont":"2","gdp":20248,"ref":0.06},{"name":"오스트리아","oecd":"1","cont":"3","gdp":56833,"ref":31.23},{"name":"온두라스","oecd":"2","cont":"4","gdp":3426,"ref":0.02},{"name":"요르단","oecd":"2","cont":"2","gdp":4456,"ref":55.71},{"name":"우간다","oecd":"2","cont":"1","gdp":1072,"ref":35.18},{"name":"우루과이","oecd":"2","cont":"5","gdp":23907,"ref":0.39},{"name":"우즈베키스탄","oecd":"2","cont":"2","gdp":3162,"ref":0.23},{"name":"우크라이나","oecd":"2","cont":"3","gdp":5390,"ref":0.06},{"name":"이라크","oecd":"2","cont":"2","gdp":6074,"ref":6.92},{"name":"이란","oecd":"2","cont":"2","gdp":5190,"ref":38.11},{"name":"이스라엘","oecd":"1","cont":"2","gdp":54177,"ref":0.13},{"name":"이집트","oecd":"2","cont":"1","gdp":3339,"ref":2.04},{"name":"이탈리아","oecd":"1","cont":"3","gdp":40226,"ref":5.27},{"name":"인도","oecd":"2","cont":"2","gdp":2697,"ref":0.16},{"name":"인도네시아","oecd":"2","cont":"2","gdp":4925,"ref":0.03},{"name":"일본","oecd":"1","cont":"2","gdp":32476,"ref":0.23},{"name":"잠비아","oecd":"2","cont":"1","gdp":1235,"ref":3.72},{"name":"적도기니","oecd":"2","cont":"1","gdp":6745,"ref":0.0},{"name":"조지아","oecd":"2","cont":"2","gdp":8284,"ref":8.15},{"name":"중앙아프리카공화국","oecd":"2","cont":"1","gdp":516,"ref":8.46},{"name":"지부티","oecd":"2","cont":"1","gdp":3497,"ref":20.52},{"name":"짐바브웨","oecd":"2","cont":"1","gdp":2656,"ref":0.56},{"name":"차드","oecd":"2","cont":"1","gdp":1016,"ref":63.0},{"name":"체코","oecd":"1","cont":"3","gdp":31707,"ref":36.43},{"name":"칠레","oecd":"1","cont":"5","gdp":16710,"ref":0.12},{"name":"카메룬","oecd":"2","cont":"1","gdp":1762,"ref":14.69},{"name":"카보베르데","oecd":"2","cont":"1","gdp":5273,"ref":0.0},{"name":"카자흐스탄","oecd":"2","cont":"2","gdp":14005,"ref":3.2},{"name":"카타르","oecd":"2","cont":"2","gdp":76276,"ref":0.06},{"name":"캄보디아","oecd":"2","cont":"2","gdp":2627,"ref":0.0},{"name":"캐나다","oecd":"1","cont":"4","gdp":54283,"ref":6.78},{"name":"케냐","oecd":"2","cont":"1","gdp":2206,"ref":10.71},{"name":"코모로","oecd":"2","cont":"1","gdp":1784,"ref":0.01},{"name":"코스타리카","oecd":"1","cont":"4","gdp":18587,"ref":6.17},{"name":"코트디부아르","oecd":"2","cont":"1","gdp":2710,"ref":0.07},{"name":"콜롬비아","oecd":"1","cont":"5","gdp":7914,"ref":0.02},{"name":"콩고","oecd":"2","cont":"1","gdp":2482,"ref":9.8},{"name":"콩고민주공화국","oecd":"2","cont":"1","gdp":647,"ref":4.73},{"name":"쿠웨이트","oecd":"2","cont":"2","gdp":33730,"ref":0.1},{"name":"크로아티아","oecd":"2","cont":"3","gdp":23932,"ref":7.41},{"name":"키르기스스탄","oecd":"2","cont":"2","gdp":2419,"ref":3.3},{"name":"키프로스","oecd":"2","cont":"3","gdp":38654,"ref":33.68},{"name":"타지키스탄","oecd":"2","cont":"2","gdp":1341,"ref":1.15},{"name":"탄자니아","oecd":"2","cont":"1","gdp":1185,"ref":2.58},{"name":"태국","oecd":"2","cont":"2","gdp":7345,"ref":1.18},{"name":"토고","oecd":"2","cont":"1","gdp":1043,"ref":5.65},{"name":"투르크메니스탄","oecd":"2","cont":"2","gdp":8572,"ref":0.45},{"name":"튀니지","oecd":"2","cont":"1","gdp":4350,"ref":0.24},{"name":"튀르키예","oecd":"1","cont":"2","gdp":15473,"ref":33.62},{"name":"트리니다드토바고","oecd":"2","cont":"4","gdp":19315,"ref":2.21},{"name":"파나마","oecd":"2","cont":"4","gdp":19103,"ref":0.59},{"name":"파라과이","oecd":"2","cont":"5","gdp":6416,"ref":0.88},{"name":"파키스탄","oecd":"2","cont":"2","gdp":1484,"ref":6.21},{"name":"파푸아뉴기니","oecd":"2","cont":"6","gdp":3076,"ref":0.73},{"name":"팔라우","oecd":"2","cont":"6","gdp":15899,"ref":0.28},{"name":"페루","oecd":"2","cont":"5","gdp":8452,"ref":0.2},{"name":"포르투갈","oecd":"1","cont":"3","gdp":28844,"ref":6.58},{"name":"폴란드","oecd":"1","cont":"3","gdp":25023,"ref":26.18},{"name":"프랑스","oecd":"1","cont":"3","gdp":46150,"ref":10.85},{"name":"피지","oecd":"2","cont":"6","gdp":6288,"ref":0.02},{"name":"핀란드","oecd":"1","cont":"3","gdp":53189,"ref":16.59},{"name":"필리핀","oecd":"2","cont":"2","gdp":3985,"ref":0.01},{"name":"헝가리","oecd":"1","cont":"3","gdp":23310,"ref":7.48},{"name":"호주","oecd":"1","cont":"6","gdp":64408,"ref":1.1},{"name":"홍콩","oecd":"2","cont":"2","gdp":54107,"ref":0.04}]},{"id":5,"title":"소득 수준 · 노동시간","sub":"잘사는 나라는 더 오래 일할까","unit":"나라","groups":{"oecd":["OECD",{"1":"OECD 회원","2":"비회원"}]},"vars":{"gdp":["1인당 GDP","달러"],"week":["1주일 평균 노동시간","시간"],"year":["1년 노동시간","시간"]},"x":"gdp","y":"week","home":"대한민국","rows":[{"name":"가봉","oecd":"2","gdp":8219,"week":41.8,"year":2174},{"name":"과테말라","oecd":"2","gdp":6150,"week":41.4,"year":2151},{"name":"그리스","oecd":"1","gdp":24752,"week":39.2,"year":2036},{"name":"나이지리아","oecd":"2","gdp":807,"week":39.7,"year":2062},{"name":"남아프리카공화국","oecd":"2","gdp":6253,"week":41.9,"year":2181},{"name":"네덜란드","oecd":"1","gdp":68219,"week":27.7,"year":1440},{"name":"노르웨이","oecd":"1","gdp":86810,"week":26.6,"year":1384},{"name":"뉴질랜드","oecd":"1","gdp":48747,"week":34.2,"year":1779},{"name":"대한민국","oecd":"1","gdp":33121,"week":38.1,"year":1980},{"name":"덴마크","oecd":"1","gdp":71852,"week":26.6,"year":1381},{"name":"도미니카공화국","oecd":"2","gdp":10876,"week":39.8,"year":2072},{"name":"독일","oecd":"1","gdp":55800,"week":26.7,"year":1386},{"name":"라트비아","oecd":"1","gdp":23367,"week":35.9,"year":1865},{"name":"러시아","oecd":"2","gdp":14889,"week":40.1,"year":2087},{"name":"레바논","oecd":"2","gdp":3478,"week":46.4,"year":2412},{"name":"루마니아","oecd":"2","gdp":20072,"week":34.5,"year":1792},{"name":"룩셈부르크","oecd":"1","gdp":137516,"week":29.0,"year":1506},{"name":"리투아니아","oecd":"1","gdp":29386,"week":36.3,"year":1886},{"name":"말레이시아","oecd":"2","gdp":11867,"week":44.4,"year":2308},{"name":"말리","oecd":"2","gdp":1086,"week":43.1,"year":2243},{"name":"멕시코","oecd":"1","gdp":14157,"week":41.1,"year":2137},{"name":"모로코","oecd":"2","gdp":3993,"week":41.8,"year":2174},{"name":"몰타","oecd":"2","gdp":42347,"week":36.8,"year":1915},{"name":"미국","oecd":"1","gdp":85810,"week":33.9,"year":1765},{"name":"미얀마","oecd":"2","gdp":1359,"week":42.2,"year":2197},{"name":"방글라데시","oecd":"2","gdp":2593,"week":45.8,"year":2383},{"name":"베트남","oecd":"2","gdp":4717,"week":41.5,"year":2160},{"name":"벨기에","oecd":"1","gdp":55723,"week":30.5,"year":1586},{"name":"부르키나파소","oecd":"2","gdp":987,"week":45.3,"year":2356},{"name":"불가리아","oecd":"2","gdp":17412,"week":31.6,"year":1645},{"name":"브라질","oecd":"2","gdp":10280,"week":32.8,"year":1708},{"name":"사우디아라비아","oecd":"2","gdp":32094,"week":40.9,"year":2125},{"name":"세네갈","oecd":"2","gdp":1744,"week":44.9,"year":2335},{"name":"수단","oecd":"2","gdp":989,"week":51.1,"year":2658},{"name":"스리랑카","oecd":"2","gdp":4516,"week":39.5,"year":2053},{"name":"스웨덴","oecd":"1","gdp":57723,"week":30.9,"year":1605},{"name":"스위스","oecd":"1","gdp":103670,"week":29.9,"year":1557},{"name":"스페인","oecd":"1","gdp":35298,"week":32.4,"year":1686},{"name":"슬로바키아","oecd":"1","gdp":26148,"week":32.6,"year":1695},{"name":"슬로베니아","oecd":"1","gdp":34089,"week":30.6,"year":1593},{"name":"싱가포르","oecd":"2","gdp":90674,"week":43.9,"year":2283},{"name":"아랍에미리트","oecd":"2","gdp":49378,"week":48.3,"year":2514},{"name":"아르헨티나","oecd":"2","gdp":13858,"week":30.9,"year":1609},{"name":"아이슬란드","oecd":"1","gdp":82704,"week":28.0,"year":1454},{"name":"아일랜드","oecd":"1","gdp":107316,"week":34.1,"year":1772},{"name":"알바니아","oecd":"2","gdp":10012,"week":41.4,"year":2152},{"name":"알제리","oecd":"2","gdp":5631,"week":42.9,"year":2232},{"name":"앙골라","oecd":"2","gdp":2122,"week":40.7,"year":2115},{"name":"에스토니아","oecd":"1","gdp":31170,"week":34.6,"year":1797},{"name":"에콰도르","oecd":"2","gdp":6875,"week":29.8,"year":1552},{"name":"영국","oecd":"1","gdp":52637,"week":32.1,"year":1668},{"name":"오만","oecd":"2","gdp":20248,"week":43.6,"year":2266},{"name":"오스트리아","oecd":"1","gdp":56833,"week":31.0,"year":1611},{"name":"요르단","oecd":"2","gdp":4456,"week":47.8,"year":2483},{"name":"우간다","oecd":"2","gdp":1072,"week":40.9,"year":2128},{"name":"우루과이","oecd":"2","gdp":23907,"week":29.5,"year":1533},{"name":"우즈베키스탄","oecd":"2","gdp":3162,"week":40.4,"year":2099},{"name":"우크라이나","oecd":"2","gdp":5390,"week":39.3,"year":2045},{"name":"이란","oecd":"2","gdp":5190,"week":43.2,"year":2246},{"name":"이스라엘","oecd":"1","gdp":54177,"week":36.6,"year":1901},{"name":"이집트","oecd":"2","gdp":3339,"week":45.6,"year":2369},{"name":"이탈리아","oecd":"1","gdp":40226,"week":33.0,"year":1718},{"name":"인도","oecd":"2","gdp":2697,"week":45.8,"year":2383},{"name":"인도네시아","oecd":"2","gdp":4925,"week":38.8,"year":2020},{"name":"일본","oecd":"1","gdp":32476,"week":32.5,"year":1691},{"name":"잠비아","oecd":"2","gdp":1235,"week":42.3,"year":2200},{"name":"중국","oecd":"2","gdp":13303,"week":44.8,"year":2328},{"name":"짐바브웨","oecd":"2","gdp":2656,"week":44.4,"year":2311},{"name":"체코","oecd":"1","gdp":31707,"week":34.4,"year":1788},{"name":"칠레","oecd":"1","gdp":16710,"week":36.8,"year":1914},{"name":"카메룬","oecd":"2","gdp":1762,"week":41.9,"year":2181},{"name":"카타르","oecd":"2","gdp":76276,"week":46.8,"year":2435},{"name":"캄보디아","oecd":"2","gdp":2627,"week":45.9,"year":2389},{"name":"캐나다","oecd":"1","gdp":54283,"week":32.5,"year":1689},{"name":"케냐","oecd":"2","gdp":2206,"week":39.1,"year":2035},{"name":"코스타리카","oecd":"1","gdp":18587,"week":41.9,"year":2177},{"name":"코트디부아르","oecd":"2","gdp":2710,"week":40.4,"year":2103},{"name":"콜롬비아","oecd":"1","gdp":7914,"week":47.5,"year":2471},{"name":"쿠웨이트","oecd":"2","gdp":33730,"week":44.6,"year":2318},{"name":"크로아티아","oecd":"2","gdp":23932,"week":35.2,"year":1831},{"name":"키프로스","oecd":"2","gdp":38654,"week":34.7,"year":1805},{"name":"탄자니아","oecd":"2","gdp":1185,"week":40.9,"year":2129},{"name":"태국","oecd":"2","gdp":7345,"week":41.9,"year":2177},{"name":"튀니지","oecd":"2","gdp":4350,"week":44.0,"year":2288},{"name":"튀르키예","oecd":"1","gdp":15473,"week":35.2,"year":1832},{"name":"파라과이","oecd":"2","gdp":6416,"week":40.8,"year":2123},{"name":"파키스탄","oecd":"2","gdp":1484,"week":47.5,"year":2471},{"name":"페루","oecd":"2","gdp":8452,"week":41.2,"year":2143},{"name":"포르투갈","oecd":"1","gdp":28844,"week":35.9,"year":1865},{"name":"폴란드","oecd":"1","gdp":25023,"week":38.9,"year":2023},{"name":"프랑스","oecd":"1","gdp":46150,"week":28.9,"year":1505},{"name":"핀란드","oecd":"1","gdp":53189,"week":30.6,"year":1591},{"name":"필리핀","oecd":"2","gdp":3985,"week":40.3,"year":2096},{"name":"헝가리","oecd":"1","gdp":23310,"week":33.2,"year":1725},{"name":"호주","oecd":"1","gdp":64408,"week":33.2,"year":1727},{"name":"홍콩","oecd":"2","gdp":54107,"week":43.1,"year":2240}]},{"id":9,"title":"합계출산율 · 아파트 가격","sub":"집값이 비싸면 아이를 덜 낳을까","unit":"시·도","groups":{"kind":["시·도 구분",{"1":"특별·광역·자치시","2":"도"}]},"vars":{"tfr":["합계출산율(2025)","명"],"births":["출생아 수(2025)","명"],"apt":["아파트 평균 매매가격(2025.12)","억 원"]},"x":"apt","y":"tfr","home":"부산","rows":[{"name":"서울","kind":"1","tfr":0.632,"births":45516,"apt":12.89},{"name":"부산","kind":"1","tfr":0.739,"births":14010,"apt":3.67},{"name":"대구","kind":"1","tfr":0.806,"births":10819,"apt":3.21},{"name":"인천","kind":"1","tfr":0.818,"births":16581,"apt":3.83},{"name":"광주","kind":"1","tfr":0.759,"births":6495,"apt":2.73},{"name":"대전","kind":"1","tfr":0.83,"births":7673,"apt":3.34},{"name":"울산","kind":"1","tfr":0.919,"births":5574,"apt":3.03},{"name":"세종","kind":"1","tfr":1.061,"births":2954,"apt":5.32},{"name":"경기","kind":"2","tfr":0.84,"births":76309,"apt":5.55},{"name":"강원","kind":"2","tfr":0.911,"births":6677,"apt":1.88},{"name":"충북","kind":"2","tfr":0.96,"births":8229,"apt":2.07},{"name":"충남","kind":"2","tfr":0.921,"births":10242,"apt":2.01},{"name":"전북","kind":"2","tfr":0.847,"births":7045,"apt":1.94},{"name":"전남","kind":"2","tfr":1.094,"births":8719,"apt":1.74},{"name":"경북","kind":"2","tfr":0.927,"births":10417,"apt":1.68},{"name":"경남","kind":"2","tfr":0.88,"births":13802,"apt":2.22},{"name":"제주","kind":"2","tfr":0.87,"births":3279,"apt":2.92}]},{"id":10,"title":"아동노동 · 1인당 GDP","sub":"가난할수록 아이가 더 일할까","unit":"나라","groups":{"cont":["대륙",{"1":"아프리카","2":"아시아·태평양","3":"아메리카","4":"유럽"}]},"vars":{"gdp":["1인당 GDP","달러"],"child":["아동 노동 비율(5~17세)","%"]},"x":"gdp","y":"child","home":null,"text":["yr"],"rows":[{"name":"가나","cont":"1","gdp":2405,"child":5.5,"yr":"2022"},{"name":"가봉","cont":"1","gdp":8219,"child":5.4,"yr":"2019–21"},{"name":"가이아나","cont":"3","gdp":29884,"child":4.9,"yr":"2019–20"},{"name":"감비아","cont":"1","gdp":909,"child":15.1,"yr":"2022–23"},{"name":"과테말라","cont":"3","gdp":6150,"child":12.2,"yr":"2022"},{"name":"기니","cont":"1","gdp":1717,"child":19.5,"yr":"2016"},{"name":"기니비사우","cont":"1","gdp":963,"child":30.4,"yr":"2022"},{"name":"나우루","cont":"2","gdp":13422,"child":0.7,"yr":"2023"},{"name":"나이지리아","cont":"1","gdp":807,"child":28.1,"yr":"2022"},{"name":"남아프리카공화국","cont":"1","gdp":6253,"child":1.9,"yr":"2015"},{"name":"네팔","cont":"2","gdp":1447,"child":19.2,"yr":"2014"},{"name":"니제르","cont":"1","gdp":723,"child":42.4,"yr":"2022"},{"name":"니카라과","cont":"3","gdp":2848,"child":25.9,"yr":"2012"},{"name":"도미니카공화국","cont":"3","gdp":10876,"child":3.1,"yr":"2019"},{"name":"동티모르","cont":"2","gdp":1343,"child":3.7,"yr":"2022"},{"name":"라오스","cont":"2","gdp":2124,"child":21.9,"yr":"2023"},{"name":"라이베리아","cont":"1","gdp":846,"child":21.1,"yr":"2019–20"},{"name":"레소토","cont":"1","gdp":972,"child":8.2,"yr":"2018"},{"name":"르완다","cont":"1","gdp":1000,"child":3.5,"yr":"2016–17"},{"name":"마다가스카르","cont":"1","gdp":545,"child":24.7,"yr":"2022"},{"name":"말라위","cont":"1","gdp":602,"child":24.1,"yr":"2020"},{"name":"말리","cont":"1","gdp":1086,"child":21.0,"yr":"2020"},{"name":"멕시코","cont":"3","gdp":14157,"child":4.3,"yr":"2022"},{"name":"모리타니","cont":"1","gdp":2121,"child":3.1,"yr":"2019"},{"name":"모잠비크","cont":"1","gdp":647,"child":10.9,"yr":"2022"},{"name":"몬테네그로","cont":"4","gdp":12936,"child":7.7,"yr":"2018"},{"name":"몽골","cont":"2","gdp":6692,"child":6.0,"yr":"2023"},{"name":"미얀마","cont":"2","gdp":1359,"child":8.1,"yr":"2015"},{"name":"바누아투","cont":"2","gdp":3543,"child":26.7,"yr":"2023"},{"name":"바베이도스","cont":"3","gdp":25365,"child":1.2,"yr":"2012"},{"name":"방글라데시","cont":"2","gdp":2593,"child":7.0,"yr":"2022"},{"name":"베냉","cont":"1","gdp":1485,"child":16.0,"yr":"2021–22"},{"name":"베트남","cont":"2","gdp":4717,"child":5.7,"yr":"2020–21"},{"name":"벨라루스","cont":"4","gdp":8316,"child":4.0,"yr":"2019"},{"name":"벨리즈","cont":"3","gdp":8430,"child":2.2,"yr":"2013"},{"name":"볼리비아","cont":"3","gdp":4001,"child":12.6,"yr":"2023"},{"name":"부룬디","cont":"1","gdp":154,"child":53.5,"yr":"2020"},{"name":"부르키나파소","cont":"1","gdp":987,"child":18.4,"yr":"2022"},{"name":"부탄","cont":"2","gdp":3839,"child":1.7,"yr":"2010"},{"name":"북마케도니아","cont":"4","gdp":9310,"child":2.4,"yr":"2018–19"},{"name":"브라질","cont":"3","gdp":10280,"child":1.5,"yr":"2022"},{"name":"사모아","cont":"2","gdp":4899,"child":6.9,"yr":"2022"},{"name":"상투메 프린시페","cont":"1","gdp":3245,"child":6.7,"yr":"2019"},{"name":"세네갈","cont":"1","gdp":1744,"child":8.6,"yr":"2022"},{"name":"세르비아","cont":"4","gdp":13524,"child":9.1,"yr":"2019"},{"name":"세인트루시아","cont":"3","gdp":14182,"child":1.9,"yr":"2012"},{"name":"솔로몬제도","cont":"2","gdp":2149,"child":13.8,"yr":"2015"},{"name":"수단","cont":"1","gdp":989,"child":15.0,"yr":"2022"},{"name":"수리남","cont":"3","gdp":7431,"child":3.4,"yr":"2018"},{"name":"스리랑카","cont":"2","gdp":4516,"child":0.8,"yr":"2016"},{"name":"시에라리온","cont":"1","gdp":873,"child":21.0,"yr":"2017"},{"name":"아르메니아","cont":"2","gdp":8501,"child":3.9,"yr":"2015"},{"name":"아르헨티나","cont":"3","gdp":13858,"child":1.8,"yr":"2016–17"},{"name":"아이티","cont":"3","gdp":2142,"child":21.6,"yr":"2012"},{"name":"아제르바이잔","cont":"2","gdp":7284,"child":4.8,"yr":"2023"},{"name":"아프가니스탄","cont":"2","gdp":414,"child":13.3,"yr":"2022–23"},{"name":"알바니아","cont":"4","gdp":10012,"child":2.8,"yr":"2010"},{"name":"알제리","cont":"1","gdp":5631,"child":1.9,"yr":"2018–19"},{"name":"앙골라","cont":"1","gdp":2122,"child":9.7,"yr":"2015–16"},{"name":"에스와티니","cont":"1","gdp":3936,"child":11.3,"yr":"2021–22"},{"name":"에콰도르","cont":"3","gdp":6875,"child":3.4,"yr":"2022"},{"name":"에티오피아","cont":"1","gdp":1011,"child":18.7,"yr":"2021"},{"name":"엘살바도르","cont":"3","gdp":5580,"child":2.9,"yr":"2023"},{"name":"예멘","cont":"2","gdp":433,"child":7.7,"yr":"2022–23"},{"name":"온두라스","cont":"3","gdp":3426,"child":12.9,"yr":"2023"},{"name":"요르단","cont":"2","gdp":4456,"child":1.2,"yr":"2016"},{"name":"우간다","cont":"1","gdp":1072,"child":40.1,"yr":"2021"},{"name":"우루과이","cont":"3","gdp":23907,"child":3.7,"yr":"2010"},{"name":"우즈베키스탄","cont":"2","gdp":3162,"child":17.8,"yr":"2021–22"},{"name":"우크라이나","cont":"4","gdp":5390,"child":2.2,"yr":"2012"},{"name":"이라크","cont":"2","gdp":6074,"child":3.1,"yr":"2018"},{"name":"이집트","cont":"1","gdp":3339,"child":8.5,"yr":"2023"},{"name":"인도","cont":"2","gdp":2697,"child":1.0,"yr":"2023"},{"name":"인도네시아","cont":"2","gdp":4925,"child":1.7,"yr":"2021"},{"name":"자메이카","cont":"3","gdp":7020,"child":2.6,"yr":"2022"},{"name":"잠비아","cont":"1","gdp":1235,"child":5.7,"yr":"2022"},{"name":"조지아","cont":"2","gdp":8284,"child":1.5,"yr":"2015"},{"name":"중앙아프리카공화국","cont":"1","gdp":516,"child":18.4,"yr":"2018–19"},{"name":"짐바브웨","cont":"1","gdp":2656,"child":25.6,"yr":"2021"},{"name":"차드","cont":"1","gdp":1016,"child":30.9,"yr":"2024"},{"name":"칠레","cont":"3","gdp":16710,"child":4.1,"yr":"2023"},{"name":"카메룬","cont":"1","gdp":1762,"child":33.4,"yr":"2014"},{"name":"캄보디아","cont":"2","gdp":2627,"child":10.4,"yr":"2021"},{"name":"케냐","cont":"1","gdp":2206,"child":4.3,"yr":"2021"},{"name":"코모로","cont":"1","gdp":1784,"child":5.8,"yr":"2022"},{"name":"코소보","cont":"4","gdp":7299,"child":3.8,"yr":"2019–20"},{"name":"코스타리카","cont":"3","gdp":18587,"child":3.4,"yr":"2018"},{"name":"코트디부아르","cont":"1","gdp":2710,"child":12.8,"yr":"2022"},{"name":"콜롬비아","cont":"3","gdp":7914,"child":1.3,"yr":"2022"},{"name":"콩고","cont":"1","gdp":2482,"child":10.8,"yr":"2014–15"},{"name":"콩고민주공화국","cont":"1","gdp":647,"child":14.7,"yr":"2020"},{"name":"키르기스스탄","cont":"2","gdp":2419,"child":18.0,"yr":"2023"},{"name":"키리바시","cont":"2","gdp":2288,"child":7.1,"yr":"2018–19"},{"name":"탄자니아","cont":"1","gdp":1185,"child":15.0,"yr":"2020–21"},{"name":"토고","cont":"1","gdp":1043,"child":25.7,"yr":"2022"},{"name":"통가","cont":"2","gdp":4864,"child":25.9,"yr":"2019"},{"name":"투르크메니스탄","cont":"2","gdp":8572,"child":0.3,"yr":"2015–16"},{"name":"투발루","cont":"2","gdp":6345,"child":3.7,"yr":"2019–20"},{"name":"튀니지","cont":"1","gdp":4350,"child":1.7,"yr":"2023"},{"name":"튀르키예","cont":"2","gdp":15473,"child":5.6,"yr":"2022"},{"name":"트리니다드토바고","cont":"3","gdp":19315,"child":4.2,"yr":"2022"},{"name":"파나마","cont":"3","gdp":19103,"child":1.9,"yr":"2023"},{"name":"파라과이","cont":"3","gdp":6416,"child":4.9,"yr":"2023"},{"name":"파키스탄","cont":"2","gdp":1484,"child":6.8,"yr":"2021"},{"name":"팔레스타인","cont":"2","gdp":2592,"child":6.3,"yr":"2019–20"},{"name":"페루","cont":"3","gdp":8452,"child":16.2,"yr":"2021"},{"name":"피지","cont":"2","gdp":6288,"child":15.6,"yr":"2021"},{"name":"필리핀","cont":"2","gdp":3985,"child":1.2,"yr":"2022"}]},{"id":11,"title":"아동노동 · 발육부진","sub":"일하는 아이는 건강할까","unit":"나라","groups":{"cont":["대륙",{"1":"아프리카","2":"아시아·태평양","3":"아메리카","4":"유럽"}]},"vars":{"gdp":["1인당 GDP","달러"],"child":["아동 노동 비율(5~17세)","%"],"stunt":["5세 미만 발육부진 아동 비율(2024)","%"]},"x":"child","y":"stunt","home":null,"text":["yr"],"rows":[{"name":"가나","cont":"1","gdp":2405,"child":5.5,"stunt":15.6,"yr":"2022"},{"name":"가봉","cont":"1","gdp":8219,"child":5.4,"stunt":13.7,"yr":"2019–21"},{"name":"가이아나","cont":"3","gdp":29884,"child":4.9,"stunt":7.1,"yr":"2019–20"},{"name":"감비아","cont":"1","gdp":909,"child":15.1,"stunt":14.0,"yr":"2022–23"},{"name":"과테말라","cont":"3","gdp":6150,"child":12.2,"stunt":44.6,"yr":"2022"},{"name":"기니","cont":"1","gdp":1717,"child":19.5,"stunt":26.6,"yr":"2016"},{"name":"기니비사우","cont":"1","gdp":963,"child":30.4,"stunt":28.3,"yr":"2022"},{"name":"나우루","cont":"2","gdp":13422,"child":0.7,"stunt":16.0,"yr":"2023"},{"name":"나이지리아","cont":"1","gdp":807,"child":28.1,"stunt":33.8,"yr":"2022"},{"name":"남아프리카공화국","cont":"1","gdp":6253,"child":1.9,"stunt":24.4,"yr":"2015"},{"name":"네팔","cont":"2","gdp":1447,"child":19.2,"stunt":26.0,"yr":"2014"},{"name":"니제르","cont":"1","gdp":723,"child":42.4,"stunt":48.3,"yr":"2022"},{"name":"도미니카공화국","cont":"3","gdp":10876,"child":3.1,"stunt":5.6,"yr":"2019"},{"name":"동티모르","cont":"2","gdp":1343,"child":3.7,"stunt":45.4,"yr":"2022"},{"name":"라오스","cont":"2","gdp":2124,"child":21.9,"stunt":29.9,"yr":"2023"},{"name":"라이베리아","cont":"1","gdp":846,"child":21.1,"stunt":26.9,"yr":"2019–20"},{"name":"레소토","cont":"1","gdp":972,"child":8.2,"stunt":35.0,"yr":"2018"},{"name":"르완다","cont":"1","gdp":1000,"child":3.5,"stunt":29.8,"yr":"2016–17"},{"name":"마다가스카르","cont":"1","gdp":545,"child":24.7,"stunt":38.4,"yr":"2022"},{"name":"말라위","cont":"1","gdp":602,"child":24.1,"stunt":33.2,"yr":"2020"},{"name":"말리","cont":"1","gdp":1086,"child":21.0,"stunt":23.2,"yr":"2020"},{"name":"멕시코","cont":"3","gdp":14157,"child":4.3,"stunt":13.1,"yr":"2022"},{"name":"모리타니","cont":"1","gdp":2121,"child":3.1,"stunt":21.5,"yr":"2019"},{"name":"모잠비크","cont":"1","gdp":647,"child":10.9,"stunt":37.0,"yr":"2022"},{"name":"몬테네그로","cont":"4","gdp":12936,"child":7.7,"stunt":8.0,"yr":"2018"},{"name":"몽골","cont":"2","gdp":6692,"child":6.0,"stunt":7.1,"yr":"2023"},{"name":"미얀마","cont":"2","gdp":1359,"child":8.1,"stunt":24.5,"yr":"2015"},{"name":"바누아투","cont":"2","gdp":3543,"child":26.7,"stunt":31.0,"yr":"2023"},{"name":"바베이도스","cont":"3","gdp":25365,"child":1.2,"stunt":5.8,"yr":"2012"},{"name":"방글라데시","cont":"2","gdp":2593,"child":7.0,"stunt":25.1,"yr":"2022"},{"name":"베냉","cont":"1","gdp":1485,"child":16.0,"stunt":33.2,"yr":"2021–22"},{"name":"베트남","cont":"2","gdp":4717,"child":5.7,"stunt":19.2,"yr":"2020–21"},{"name":"벨라루스","cont":"4","gdp":8316,"child":4.0,"stunt":1.1,"yr":"2019"},{"name":"벨리즈","cont":"3","gdp":8430,"child":2.2,"stunt":11.7,"yr":"2013"},{"name":"볼리비아","cont":"3","gdp":4001,"child":12.6,"stunt":10.7,"yr":"2023"},{"name":"부룬디","cont":"1","gdp":154,"child":53.5,"stunt":55.3,"yr":"2020"},{"name":"부르키나파소","cont":"1","gdp":987,"child":18.4,"stunt":19.5,"yr":"2022"},{"name":"부탄","cont":"2","gdp":3839,"child":1.7,"stunt":17.9,"yr":"2010"},{"name":"북마케도니아","cont":"4","gdp":9310,"child":2.4,"stunt":3.8,"yr":"2018–19"},{"name":"브라질","cont":"3","gdp":10280,"child":1.5,"stunt":8.9,"yr":"2022"},{"name":"사모아","cont":"2","gdp":4899,"child":6.9,"stunt":8.4,"yr":"2022"},{"name":"상투메 프린시페","cont":"1","gdp":3245,"child":6.7,"stunt":10.0,"yr":"2019"},{"name":"세네갈","cont":"1","gdp":1744,"child":8.6,"stunt":17.2,"yr":"2022"},{"name":"세르비아","cont":"4","gdp":13524,"child":9.1,"stunt":4.6,"yr":"2019"},{"name":"세인트루시아","cont":"3","gdp":14182,"child":1.9,"stunt":2.8,"yr":"2012"},{"name":"솔로몬제도","cont":"2","gdp":2149,"child":13.8,"stunt":29.8,"yr":"2015"},{"name":"수단","cont":"1","gdp":989,"child":15.0,"stunt":35.4,"yr":"2022"},{"name":"수리남","cont":"3","gdp":7431,"child":3.4,"stunt":8.0,"yr":"2018"},{"name":"스리랑카","cont":"2","gdp":4516,"child":0.8,"stunt":10.1,"yr":"2016"},{"name":"시에라리온","cont":"1","gdp":873,"child":21.0,"stunt":25.2,"yr":"2017"},{"name":"아르메니아","cont":"2","gdp":8501,"child":3.9,"stunt":6.2,"yr":"2015"},{"name":"아르헨티나","cont":"3","gdp":13858,"child":1.8,"stunt":10.7,"yr":"2016–17"},{"name":"아이티","cont":"3","gdp":2142,"child":21.6,"stunt":21.6,"yr":"2012"},{"name":"아제르바이잔","cont":"2","gdp":7284,"child":4.8,"stunt":6.8,"yr":"2023"},{"name":"아프가니스탄","cont":"2","gdp":414,"child":13.3,"stunt":42.0,"yr":"2022–23"},{"name":"알바니아","cont":"4","gdp":10012,"child":2.8,"stunt":7.4,"yr":"2010"},{"name":"알제리","cont":"1","gdp":5631,"child":1.9,"stunt":8.9,"yr":"2018–19"},{"name":"앙골라","cont":"1","gdp":2122,"child":9.7,"stunt":47.7,"yr":"2015–16"},{"name":"에스와티니","cont":"1","gdp":3936,"child":11.3,"stunt":18.9,"yr":"2021–22"},{"name":"에콰도르","cont":"3","gdp":6875,"child":3.4,"stunt":17.7,"yr":"2022"},{"name":"에티오피아","cont":"1","gdp":1011,"child":18.7,"stunt":35.5,"yr":"2021"},{"name":"엘살바도르","cont":"3","gdp":5580,"child":2.9,"stunt":9.4,"yr":"2023"},{"name":"예멘","cont":"2","gdp":433,"child":7.7,"stunt":47.4,"yr":"2022–23"},{"name":"온두라스","cont":"3","gdp":3426,"child":12.9,"stunt":17.9,"yr":"2023"},{"name":"요르단","cont":"2","gdp":4456,"child":1.2,"stunt":7.7,"yr":"2016"},{"name":"우간다","cont":"1","gdp":1072,"child":40.1,"stunt":23.5,"yr":"2021"},{"name":"우루과이","cont":"3","gdp":23907,"child":3.7,"stunt":6.5,"yr":"2010"},{"name":"우즈베키스탄","cont":"2","gdp":3162,"child":17.8,"stunt":6.7,"yr":"2021–22"},{"name":"우크라이나","cont":"4","gdp":5390,"child":2.2,"stunt":11.7,"yr":"2012"},{"name":"이라크","cont":"2","gdp":6074,"child":3.1,"stunt":9.4,"yr":"2018"},{"name":"이집트","cont":"1","gdp":3339,"child":8.5,"stunt":12.9,"yr":"2023"},{"name":"인도","cont":"2","gdp":2697,"child":1.0,"stunt":32.9,"yr":"2023"},{"name":"인도네시아","cont":"2","gdp":4925,"child":1.7,"stunt":22.6,"yr":"2021"},{"name":"자메이카","cont":"3","gdp":7020,"child":2.6,"stunt":6.9,"yr":"2022"},{"name":"잠비아","cont":"1","gdp":1235,"child":5.7,"stunt":32.3,"yr":"2022"},{"name":"조지아","cont":"2","gdp":8284,"child":1.5,"stunt":4.7,"yr":"2015"},{"name":"중앙아프리카공화국","cont":"1","gdp":516,"child":18.4,"stunt":38.9,"yr":"2018–19"},{"name":"짐바브웨","cont":"1","gdp":2656,"child":25.6,"stunt":23.7,"yr":"2021"},{"name":"차드","cont":"1","gdp":1016,"child":30.9,"stunt":31.5,"yr":"2024"},{"name":"칠레","cont":"3","gdp":16710,"child":4.1,"stunt":1.7,"yr":"2023"},{"name":"카메룬","cont":"1","gdp":1762,"child":33.4,"stunt":27.2,"yr":"2014"},{"name":"캄보디아","cont":"2","gdp":2627,"child":10.4,"stunt":22.0,"yr":"2021"},{"name":"케냐","cont":"1","gdp":2206,"child":4.3,"stunt":17.9,"yr":"2021"},{"name":"코모로","cont":"1","gdp":1784,"child":5.8,"stunt":17.4,"yr":"2022"},{"name":"코스타리카","cont":"3","gdp":18587,"child":3.4,"stunt":10.6,"yr":"2018"},{"name":"코트디부아르","cont":"1","gdp":2710,"child":12.8,"stunt":20.3,"yr":"2022"},{"name":"콜롬비아","cont":"3","gdp":7914,"child":1.3,"stunt":11.6,"yr":"2022"},{"name":"콩고","cont":"1","gdp":2482,"child":10.8,"stunt":16.3,"yr":"2014–15"},{"name":"콩고민주공화국","cont":"1","gdp":647,"child":14.7,"stunt":44.1,"yr":"2020"},{"name":"키르기스스탄","cont":"2","gdp":2419,"child":18.0,"stunt":11.0,"yr":"2023"},{"name":"키리바시","cont":"2","gdp":2288,"child":7.1,"stunt":14.7,"yr":"2018–19"},{"name":"탄자니아","cont":"1","gdp":1185,"child":15.0,"stunt":29.9,"yr":"2020–21"},{"name":"토고","cont":"1","gdp":1043,"child":25.7,"stunt":23.0,"yr":"2022"},{"name":"통가","cont":"2","gdp":4864,"child":25.9,"stunt":1.6,"yr":"2019"},{"name":"투르크메니스탄","cont":"2","gdp":8572,"child":0.3,"stunt":6.5,"yr":"2015–16"},{"name":"투발루","cont":"2","gdp":6345,"child":3.7,"stunt":5.3,"yr":"2019–20"},{"name":"튀니지","cont":"1","gdp":4350,"child":1.7,"stunt":8.9,"yr":"2023"},{"name":"튀르키예","cont":"2","gdp":15473,"child":5.6,"stunt":5.5,"yr":"2022"},{"name":"트리니다드토바고","cont":"3","gdp":19315,"child":4.2,"stunt":7.8,"yr":"2022"},{"name":"파나마","cont":"3","gdp":19103,"child":1.9,"stunt":14.0,"yr":"2023"},{"name":"파라과이","cont":"3","gdp":6416,"child":4.9,"stunt":3.2,"yr":"2023"},{"name":"파키스탄","cont":"2","gdp":1484,"child":6.8,"stunt":33.6,"yr":"2021"},{"name":"팔레스타인","cont":"2","gdp":2592,"child":6.3,"stunt":8.0,"yr":"2019–20"},{"name":"페루","cont":"3","gdp":8452,"child":16.2,"stunt":10.6,"yr":"2021"},{"name":"피지","cont":"2","gdp":6288,"child":15.6,"stunt":7.2,"yr":"2021"},{"name":"필리핀","cont":"2","gdp":3985,"child":1.2,"stunt":27.7,"yr":"2022"}]},{"id":12,"title":"여성 고용 · 출산율","sub":"엄마가 일하면 아이를 덜 낳을까","unit":"나라","groups":{"oecd":["OECD",{"1":"OECD 회원","2":"비회원"}],"cont":["대륙",{"1":"아프리카","2":"아시아","3":"유럽","4":"북아메리카","5":"남아메리카","6":"오세아니아"}]},"vars":{"tfr":["합계출산율(2023)","명"],"femp":["여성 고용률(2023)","%"],"mort":["5세 미만 아동 사망률(2023)","%"]},"x":"femp","y":"tfr","home":"대한민국","rows":[{"name":"가나","oecd":"2","cont":"1","tfr":3.4,"femp":63.2,"mort":4.1},{"name":"감비아","oecd":"2","cont":"1","tfr":4.01,"femp":42.7,"mort":4.4},{"name":"과테말라","oecd":"2","cont":"4","tfr":2.31,"femp":50.8,"mort":2.15},{"name":"그레나다","oecd":"2","cont":"4","tfr":1.49,"femp":52.6,"mort":1.61},{"name":"그리스","oecd":"1","cont":"3","tfr":1.33,"femp":38.4,"mort":0.38},{"name":"나이지리아","oecd":"2","cont":"1","tfr":4.48,"femp":77.5,"mort":10.42},{"name":"남아프리카공화국","oecd":"2","cont":"1","tfr":2.22,"femp":32.1,"mort":3.74},{"name":"네덜란드","oecd":"1","cont":"3","tfr":1.43,"femp":61.7,"mort":0.39},{"name":"노르웨이","oecd":"1","cont":"3","tfr":1.41,"femp":60.0,"mort":0.24},{"name":"뉴질랜드","oecd":"1","cont":"6","tfr":1.67,"femp":64.9,"mort":0.54},{"name":"뉴칼레도니아","oecd":"2","cont":"6","tfr":1.98,"femp":48.3,"mort":1.18},{"name":"대한민국","oecd":"1","cont":"2","tfr":0.72,"femp":54.5,"mort":0.28},{"name":"덴마크","oecd":"1","cont":"3","tfr":1.51,"femp":56.5,"mort":0.34},{"name":"도미니카공화국","oecd":"2","cont":"4","tfr":2.24,"femp":48.4,"mort":3.17},{"name":"독일","oecd":"1","cont":"3","tfr":1.44,"femp":55.2,"mort":0.35},{"name":"라트비아","oecd":"1","cont":"3","tfr":1.34,"femp":52.7,"mort":0.36},{"name":"러시아","oecd":"2","cont":"3","tfr":1.45,"femp":54.4,"mort":0.44},{"name":"루마니아","oecd":"2","cont":"3","tfr":1.71,"femp":39.8,"mort":0.59},{"name":"룩셈부르크","oecd":"1","cont":"3","tfr":1.4,"femp":55.1,"mort":0.68},{"name":"르완다","oecd":"2","cont":"1","tfr":3.7,"femp":49.8,"mort":3.68},{"name":"리투아니아","oecd":"1","cont":"3","tfr":1.2,"femp":54.8,"mort":0.32},{"name":"말리","oecd":"2","cont":"1","tfr":5.61,"femp":45.3,"mort":9.17},{"name":"멕시코","oecd":"1","cont":"4","tfr":1.91,"femp":45.7,"mort":1.24},{"name":"모리셔스","oecd":"2","cont":"1","tfr":1.24,"femp":43.4,"mort":1.42},{"name":"몬테네그로","oecd":"2","cont":"3","tfr":1.8,"femp":49.6,"mort":0.33},{"name":"몰도바","oecd":"2","cont":"3","tfr":1.73,"femp":69.2,"mort":1.39},{"name":"몰타","oecd":"2","cont":"3","tfr":1.1,"femp":61.4,"mort":0.77},{"name":"몽골","oecd":"2","cont":"2","tfr":2.69,"femp":50.4,"mort":1.28},{"name":"미국","oecd":"1","cont":"4","tfr":1.62,"femp":55.4,"mort":0.62},{"name":"바베이도스","oecd":"2","cont":"4","tfr":1.71,"femp":53.4,"mort":1.05},{"name":"바하마","oecd":"2","cont":"4","tfr":1.37,"femp":63.6,"mort":1.27},{"name":"방글라데시","oecd":"2","cont":"2","tfr":2.16,"femp":40.2,"mort":2.76},{"name":"베트남","oecd":"2","cont":"2","tfr":1.91,"femp":66.9,"mort":2.02},{"name":"벨기에","oecd":"1","cont":"3","tfr":1.38,"femp":48.1,"mort":0.39},{"name":"벨라루스","oecd":"2","cont":"3","tfr":1.21,"femp":63.4,"mort":0.24},{"name":"보스니아헤르체고비나","oecd":"2","cont":"3","tfr":1.49,"femp":36.8,"mort":0.6},{"name":"보츠와나","oecd":"2","cont":"1","tfr":2.73,"femp":46.1,"mort":3.76},{"name":"볼리비아","oecd":"2","cont":"5","tfr":2.55,"femp":70.1,"mort":4.14},{"name":"부르키나파소","oecd":"2","cont":"1","tfr":4.19,"femp":39.4,"mort":7.71},{"name":"부탄","oecd":"2","cont":"2","tfr":1.46,"femp":54.3,"mort":2.27},{"name":"북마케도니아","oecd":"2","cont":"3","tfr":1.47,"femp":37.6,"mort":0.57},{"name":"불가리아","oecd":"2","cont":"3","tfr":1.75,"femp":47.7,"mort":0.57},{"name":"브라질","oecd":"2","cont":"5","tfr":1.62,"femp":48.0,"mort":1.38},{"name":"브루나이","oecd":"2","cont":"2","tfr":1.75,"femp":51.5,"mort":0.97},{"name":"사우디아라비아","oecd":"2","cont":"2","tfr":2.28,"femp":30.2,"mort":0.62},{"name":"세네갈","oecd":"2","cont":"1","tfr":3.82,"femp":33.6,"mort":3.56},{"name":"세르비아","oecd":"2","cont":"3","tfr":1.5,"femp":47.0,"mort":0.5},{"name":"세이셸","oecd":"2","cont":"1","tfr":2.13,"femp":59.8,"mort":1.43},{"name":"세인트루시아","oecd":"2","cont":"4","tfr":1.38,"femp":53.9,"mort":1.72},{"name":"스리랑카","oecd":"2","cont":"2","tfr":1.97,"femp":29.1,"mort":0.63},{"name":"스웨덴","oecd":"1","cont":"3","tfr":1.43,"femp":59.3,"mort":0.24},{"name":"스위스","oecd":"1","cont":"3","tfr":1.43,"femp":59.9,"mort":0.36},{"name":"스페인","oecd":"1","cont":"3","tfr":1.21,"femp":46.0,"mort":0.29},{"name":"슬로바키아","oecd":"1","cont":"3","tfr":1.56,"femp":52.9,"mort":0.55},{"name":"슬로베니아","oecd":"1","cont":"3","tfr":1.58,"femp":51.8,"mort":0.22},{"name":"싱가포르","oecd":"2","cont":"2","tfr":0.94,"femp":60.3,"mort":0.22},{"name":"아랍에미리트","oecd":"2","cont":"2","tfr":1.2,"femp":52.2,"mort":0.6},{"name":"아르메니아","oecd":"2","cont":"2","tfr":1.71,"femp":51.5,"mort":0.98},{"name":"아르헨티나","oecd":"2","cont":"5","tfr":1.5,"femp":49.6,"mort":1.03},{"name":"아이슬란드","oecd":"1","cont":"3","tfr":1.54,"femp":68.3,"mort":0.16},{"name":"아일랜드","oecd":"1","cont":"3","tfr":1.6,"femp":58.0,"mort":0.33},{"name":"알바니아","oecd":"2","cont":"3","tfr":1.35,"femp":51.2,"mort":0.95},{"name":"앙골라","oecd":"2","cont":"1","tfr":5.12,"femp":62.1,"mort":6.43},{"name":"에스와티니","oecd":"2","cont":"1","tfr":2.75,"femp":30.6,"mort":4.96},{"name":"에스토니아","oecd":"1","cont":"3","tfr":1.35,"femp":57.9,"mort":0.2},{"name":"에콰도르","oecd":"2","cont":"5","tfr":1.82,"femp":50.6,"mort":1.18},{"name":"엘살바도르","oecd":"2","cont":"4","tfr":1.77,"femp":47.2,"mort":1.14},{"name":"영국","oecd":"1","cont":"3","tfr":1.56,"femp":56.0,"mort":0.42},{"name":"오스트리아","oecd":"1","cont":"3","tfr":1.32,"femp":54.0,"mort":0.35},{"name":"온두라스","oecd":"2","cont":"4","tfr":2.5,"femp":36.8,"mort":1.54},{"name":"요르단","oecd":"2","cont":"2","tfr":2.64,"femp":12.1,"mort":1.37},{"name":"우루과이","oecd":"2","cont":"5","tfr":1.41,"femp":51.2,"mort":0.68},{"name":"이란","oecd":"2","cont":"2","tfr":1.7,"femp":12.1,"mort":1.16},{"name":"이스라엘","oecd":"1","cont":"2","tfr":2.83,"femp":59.4,"mort":0.39},{"name":"이집트","oecd":"2","cont":"1","tfr":2.75,"femp":15.5,"mort":1.77},{"name":"이탈리아","oecd":"1","cont":"3","tfr":1.2,"femp":37.9,"mort":0.27},{"name":"인도","oecd":"2","cont":"2","tfr":1.98,"femp":33.7,"mort":2.76},{"name":"인도네시아","oecd":"2","cont":"2","tfr":2.13,"femp":51.7,"mort":2.05},{"name":"일본","oecd":"1","cont":"2","tfr":1.21,"femp":53.5,"mort":0.23},{"name":"자메이카","oecd":"2","cont":"4","tfr":1.36,"femp":58.2,"mort":1.94},{"name":"잠비아","oecd":"2","cont":"1","tfr":4.1,"femp":53.0,"mort":5.2},{"name":"조지아","oecd":"2","cont":"2","tfr":1.81,"femp":52.7,"mort":0.92},{"name":"짐바브웨","oecd":"2","cont":"1","tfr":3.72,"femp":56.2,"mort":4.57},{"name":"체코","oecd":"1","cont":"3","tfr":1.45,"femp":50.2,"mort":0.27},{"name":"칠레","oecd":"1","cont":"5","tfr":1.17,"femp":47.2,"mort":0.5},{"name":"캄보디아","oecd":"2","cont":"2","tfr":2.58,"femp":74.2,"mort":2.29},{"name":"캐나다","oecd":"1","cont":"4","tfr":1.35,"femp":58.4,"mort":0.49},{"name":"코스타리카","oecd":"1","cont":"4","tfr":1.33,"femp":39.4,"mort":0.76},{"name":"콜롬비아","oecd":"1","cont":"5","tfr":1.65,"femp":45.9,"mort":1.19},{"name":"크로아티아","oecd":"2","cont":"3","tfr":1.47,"femp":44.8,"mort":0.4},{"name":"키르기스스탄","oecd":"2","cont":"2","tfr":2.8,"femp":41.7,"mort":1.7},{"name":"키리바시","oecd":"2","cont":"6","tfr":3.15,"femp":45.0,"mort":5.48},{"name":"키프로스","oecd":"2","cont":"3","tfr":1.39,"femp":57.6,"mort":0.36},{"name":"태국","oecd":"2","cont":"2","tfr":1.21,"femp":60.1,"mort":0.81},{"name":"통가","oecd":"2","cont":"6","tfr":3.13,"femp":41.9,"mort":1.07},{"name":"튀니지","oecd":"2","cont":"1","tfr":1.83,"femp":21.2,"mort":1.07},{"name":"튀르키예","oecd":"1","cont":"2","tfr":1.62,"femp":31.3,"mort":1.31},{"name":"트리니다드토바고","oecd":"2","cont":"4","tfr":1.53,"femp":44.9,"mort":1.6},{"name":"파나마","oecd":"2","cont":"4","tfr":2.12,"femp":46.1,"mort":1.61},{"name":"파라과이","oecd":"2","cont":"5","tfr":2.42,"femp":54.7,"mort":1.68},{"name":"팔라우","oecd":"2","cont":"6","tfr":1.91,"femp":59.5,"mort":2.2},{"name":"페루","oecd":"2","cont":"5","tfr":1.98,"femp":61.3,"mort":1.48},{"name":"포르투갈","oecd":"1","cont":"3","tfr":1.51,"femp":51.2,"mort":0.32},{"name":"폴란드","oecd":"1","cont":"3","tfr":1.3,"femp":50.5,"mort":0.37},{"name":"프랑스","oecd":"1","cont":"3","tfr":1.64,"femp":49.0,"mort":0.41},{"name":"핀란드","oecd":"1","cont":"3","tfr":1.28,"femp":54.8,"mort":0.25},{"name":"필리핀","oecd":"2","cont":"2","tfr":1.92,"femp":48.6,"mort":2.77},{"name":"헝가리","oecd":"1","cont":"3","tfr":1.49,"femp":52.3,"mort":0.39},{"name":"호주","oecd":"1","cont":"6","tfr":1.64,"femp":60.6,"mort":0.38},{"name":"홍콩","oecd":"2","cont":"2","tfr":0.72,"femp":51.0,"mort":0.18}]}];
+
+/* ---------- 논제 (자료별 5개) ---------- */
+// g: 우리 자료로 바로 답할 수 있어요 / y: 일부만 답할 수 있어요 / r: 다른 자료가 더 필요해요
+const TOPICS = {
+ 1:[
+  ['y','우리 학교도 수업 시간에 스마트폰 사용을 금지해야 한다.','볼 관계: 여가 SNS·게임 시간 × 성적. 자료는 ‘여가’ 시간이라 수업 중 사용과는 달라요.'],
+  ['y','숙제할 때 AI를 써도 된다.','볼 관계: AI 활용 지수 × 성적. 숙제만이 아니라 ‘공부 전체’에 AI를 쓴 정도예요.'],
+  ['g','청소년의 SNS 사용 시간을 법으로 제한해야 한다.','볼 관계: 여가 SNS 시간 × 읽기·수학·과학. SNS 자료가 있는 나라는 몇 개인지 먼저 확인해요.'],
+  ['r','학교는 쉬는 시간에도 휴대폰을 걷어야 한다.','쉬는 시간 휴대폰 자료는 없어요. 여가 SNS·게임 결과로 말할 수 있는 만큼 쓰고, 더 필요한 자료를 생각해요.'],
+  ['g','학교는 AI를 활용하는 수업을 더 늘려야 한다.','볼 관계: AI 활용 지수 × 성적. OECD 회원과 비회원으로 나눠 보면 더 좋아요.']],
+ 2:[
+  ['g','우리나라 학생들은 공부 시간을 줄여야 한다.','볼 관계: 하루 숙제 시간 × 삶의 만족도(또는 수학 평균). 자료는 ‘공부 시간’이 아니라 ‘숙제 시간’이에요.'],
+  ['r','학원 수업은 밤 10시 전에 끝나야 한다.','학원 자료는 없어요. 숙제 시간 결과로 어디까지 말할 수 있는지, 어떤 자료가 더 필요한지 생각해요.'],
+  ['g','우리나라 학교는 숙제를 줄여야 한다.','볼 관계: 하루 숙제 시간 × 수학 평균, 하루 숙제 시간 × 삶의 만족도.'],
+  ['g','시험 성적보다 학생의 행복을 먼저 생각해야 한다.','볼 관계: 수학 평균 × 삶의 만족도. 성적이 높은 나라 학생들이 더 행복할까요?'],
+  ['r','수학 시간을 줄이고 예체능 시간을 늘려야 한다.','과목별 수업 시간 자료는 없어요. 다른 자료가 필요해요.']],
+ 4:[
+  ['g','우리나라는 난민을 지금보다 더 많이 받아들여야 한다.','볼 것: 대한민국의 난민 수용 순위, OECD 회원국 중앙값과 비교.'],
+  ['y','난민을 돕는 것은 잘사는 나라의 책임이다.','볼 관계: 1인당 GDP × 난민 수용. ‘책임’은 가치 판단이라 자료는 답의 일부만 줘요.'],
+  ['g','잘사는 나라일수록 난민을 더 많이 받아들여야 한다.','볼 관계: 1인당 GDP × 난민 수용. 특이점을 빼면 달라질까요?'],
+  ['y','전쟁이 난 나라의 이웃 나라만 난민을 떠맡는 것은 불공평하다.','전쟁·이웃 나라 자료는 없어요. 대륙별 대푯값으로 어느 지역이 많이 받는지는 볼 수 있어요.'],
+  ['g','난민 수용은 나라의 경제력에 맞춰 나누어 맡아야 한다.','볼 관계: 1인당 GDP × 난민 수용. 지금 경제력에 맞게 나누어 맡고 있는지 확인해요.']],
+ 5:[
+  ['y','우리나라도 주 4일만 일하는 제도를 만들어야 한다.','볼 것: 대한민국의 노동시간 위치. 주 4일제의 효과를 보여 주는 자료는 없어요.'],
+  ['g','우리나라는 노동시간을 지금보다 더 줄여야 한다.','볼 것: 1인당 GDP × 노동시간, 대한민국과 OECD 중앙값 비교.'],
+  ['g','나라가 잘살려면 더 오래 일해야 한다.','볼 관계: 1인당 GDP × 노동시간. 함께 움직이면 원인일까요?'],
+  ['y','회사는 부모의 퇴근 시간을 앞당겨야 한다.','부모만 따로 본 자료는 없어요. 나라 전체 노동시간으로 말할 수 있는 만큼 써요.'],
+  ['y','노동시간을 줄이기 위해 월급이 조금 줄어드는 것은 받아들여야 한다.','자료는 나라 평균(1인당 GDP)이라 한 사람의 월급과는 달라요(단위 카드).']],
+ 9:[
+  ['g','아이를 더 낳게 하려면 집값부터 낮춰야 한다.','볼 관계: 아파트 가격 × 합계출산율(17개 시·도). 유난히 튀는 곳을 빼면 어떻게 될까요?'],
+  ['y','아이를 낳은 가정에 집을 싸게 빌려주어야 한다.','볼 관계: 아파트 가격 × 합계출산율. 임대 정책의 효과를 보여 주는 자료는 없어요.'],
+  ['r','출산율을 높이려면 어린이집을 더 늘려야 한다.','어린이집 자료는 없어요. 집값 결과로 말할 수 있는 것과 더 필요한 자료를 생각해요.'],
+  ['r','출산율을 높이려면 결혼 지원부터 해야 한다.','결혼 자료는 없어요. 다른 자료가 필요해요.'],
+  ['r','부산은 청년이 떠나지 않도록 일자리를 먼저 늘려야 한다.','일자리 자료는 없어요. 부산의 출산율·집값 위치는 볼 수 있어요.']],
+ 10:[
+  ['r','아동노동으로 만든 물건은 사지 말아야 한다.','소비·무역 자료는 없어요. GDP × 아동노동 결과에서 출발해 더 필요한 자료를 생각해요.'],
+  ['y','잘사는 나라는 아동노동을 막도록 도와야 한다.','볼 관계: 1인당 GDP × 아동노동. 자료에 어떤 나라들이 들어 있는지 먼저 확인해요.'],
+  ['r','가난한 나라를 돕는 돈은 학교를 짓는 데 먼저 써야 한다.','학교·교육 자료는 없어요. 다른 자료가 필요해요.'],
+  ['r','모든 아이가 학교에 다니도록 법으로 정해야 한다.','법·취학률 자료는 없어요. 다른 자료가 필요해요.'],
+  ['y','가족을 돕기 위해 아이가 일하는 것은 받아들여야 한다.','볼 관계: 1인당 GDP × 아동노동. 가난과 아동노동이 함께 움직이는지 볼 수 있어요. ‘받아들여야 하는가’는 가치 판단이에요.']],
+ 11:[
+  ['y','가난한 나라 아이들에게 급식부터 지원해야 한다.','볼 관계: 1인당 GDP × 발육부진(영양 상태). 급식의 효과를 보여 주는 자료는 없어요.'],
+  ['y','아동노동을 법으로 완전히 금지해야 한다.','볼 관계: 아동노동 × 발육부진. 아동노동이 아이 건강과 관련 있는지 확인해요.'],
+  ['r','아이가 일을 하더라도 학교는 꼭 다니게 해야 한다.','학교 자료는 없어요. 다른 자료가 필요해요.'],
+  ['y','아이의 건강을 지키는 것은 가족보다 나라의 책임이다.','볼 관계: 1인당 GDP × 발육부진. 나라가 잘살면 아이들이 더 건강할까요?'],
+  ['r','아이 건강을 위해 깨끗한 물부터 공급해야 한다.','물 자료는 없어요. 다른 자료가 필요해요.']],
+ 12:[
+  ['y','아빠도 육아휴직을 꼭 쓰게 해야 한다.','육아휴직 자료는 없어요. 여성 고용률 × 출산율로 ‘일과 육아’에 대해 말할 수 있는 만큼 써요.'],
+  ['y','회사 안에 어린이집을 꼭 두어야 한다.','어린이집 자료는 없어요. 여성 고용률 × 출산율로 ‘엄마가 일하면 아이를 덜 낳는지’부터 확인해요.'],
+  ['y','일하는 부모의 근무 시간을 줄여 주어야 한다.','근무 시간 자료는 없어요. 여성 고용률 × 출산율 결과로 말할 수 있는 만큼 써요.'],
+  ['y','정부가 가족 지원에 돈을 더 써야 한다.','가족 지원 예산 자료는 없어요. 출산율과 함께 움직이는 다른 변수도 자료에 있는지 살펴봐요.'],
+  ['y','출산율을 높이려면 보육시설을 더 늘려야 한다.','보육시설 자료는 없어요. 여성 고용률 × 출산율, OECD 회원국만 따로 보기도 해 봐요.']]
+};
+
+/* ---------- 한계 카드 ---------- */
+const LIMIT_DEF = {
+  '대표성':'평균·중앙값이 자료를 잘 대표하나?',
+  '특이점':'튀는 곳을 빼도 같을까?',
+  '인과':'함께 움직이면 원인일까?',
+  '단위':'나라 평균을 한 사람에게 적용해도 될까?'
+};
+const LIMIT_EX = {
+ 1:{대표성:'SNS·게임 자료는 일부 나라에만 있어요. 이 나라들이 세계 전체를 대표할까?',특이점:'점수가 유난히 높거나 낮은 나라를 빼도 관계가 같을까?',인과:'AI를 많이 쓰는 나라의 점수가 낮다면, AI 때문일까? 다른 이유는 없을까?',단위:'나라 평균이 그렇다고 우리 반 한 사람도 그럴까?'},
+ 2:{대표성:'숙제 시간 평균이 그 나라 학생 모두의 숙제 시간을 대표할까?',특이점:'숙제 시간이나 만족도가 유난히 튀는 나라를 빼면 어떨까?',인과:'숙제를 많이 해서 덜 행복한 걸까, 다른 이유가 있을까?',단위:'나라 평균 만족도를 나 한 사람에게 적용해도 될까?'},
+ 4:{대표성:'난민 수용은 평균과 중앙값 중 무엇이 대부분의 나라를 잘 대표할까?',특이점:'난민을 아주 많이 받는 몇 나라를 빼면 관계가 바뀔까?',인과:'잘살아서 난민을 받는 걸까, 전쟁 난 나라와 가까워서 받는 걸까?',단위:'인구 1,000명당 수치는 나라 크기를 고려한 걸까? 나라 평균 소득이 모든 국민의 형편일까?'},
+ 5:{대표성:'평균 노동시간이 모든 직업의 일하는 시간을 대표할까?',특이점:'1인당 GDP가 유난히 높은 나라를 빼면 어떨까?',인과:'일을 덜 해서 잘사는 걸까, 잘살아서 일을 덜 하는 걸까?',단위:'나라 평균을 우리 부모님 한 사람에게 적용해도 될까?'},
+ 9:{대표성:'17개 시·도뿐이에요. 몇 곳만으로 결론을 내도 될까?',특이점:'아파트값이 유난히 비싼 곳을 빼도 관계가 같을까?',인과:'집값 때문에 아이를 덜 낳는 걸까, 일자리·나이 같은 다른 이유일까?',단위:'시·도 평균 집값이 그 지역 모든 가정의 사정을 말해 줄까?'},
+ 10:{대표성:'자료에 들어 있는 나라는 어떤 나라들일까? 조사 연도도 나라마다 달라요.',특이점:'아동노동 비율이 유난히 높은 나라를 빼면 어떨까?',인과:'가난해서 아이가 일하는 걸까, 아이가 일해서 가난한 걸까?',단위:'1인당 GDP가 높은 나라에 사는 아이는 모두 일하지 않을까?'},
+ 11:{대표성:'조사 연도가 나라마다 달라요. 같은 때의 모습을 대표할까?',특이점:'발육부진 비율이 유난히 높은 나라를 빼면 어떨까?',인과:'일을 해서 건강이 나빠질까, 가난이 둘 다의 원인일까? (1인당 GDP도 확인)',단위:'나라 비율로 일하는 아이 한 명의 건강을 말할 수 있을까?'},
+ 12:{대표성:'OECD 회원국과 비회원국을 함께 보면 한 대푯값으로 대표할 수 있을까?',특이점:'출산율이 유난히 높은 나라를 빼면 어떨까?',인과:'출산율과 더 강하게 함께 움직이는 변수가 자료에 있지 않을까?',단위:'나라 평균을 한 가정에 적용해도 될까?'}
+};
+
+const PARAS = [
+ {n:1,name:'문제제기',q:'어떤 논제이고, 무엇과 무엇의 관계를 봐야 할까?',
+  frames:['‘{논제}’라는 논제에 답하려면 ______와(과) ______의 관계를 살펴봐야 한다.','이 논제는 ______ 문제와 관련이 있다. 왜냐하면 ______.']},
+ {n:2,name:'분석 결과',q:'우리 그래프(산점도·대푯값)는 무엇을 보여 주나? (수치 1개 이상)',
+  frames:['우리 모둠의 분석 결과, ______. 상관계수는 ( )로 ______.','( ) 집단의 중앙값은 ( )로, ( ) 집단의 ( )보다 ( 크다 / 작다 ).','( )은(는) 특이점이 있어 평균보다 중앙값이 자료를 더 잘 대표한다. 왜냐하면 ______.','대한민국은 ( )개 나라 중 ( )번째로 ______.']},
+ {n:3,name:'통계의 한계',q:'이 결과만으로 말할 수 없는 것은? (카드 하나 고르기)',
+  frames:['하지만 이 결과만으로는 ______라고 말할 수 없다. 왜냐하면 ______.','( )을(를) 빼고 다시 보면 상관계수가 ( )로, ______.','더 알아보려면 ______ 자료가 필요하다. 그 자료에 의하면 ______.']},
+ {n:4,name:'나의 결론',q:'1~3을 보고 정해요.',
+  frames:['따라서 나는 이 논제에 ( 찬성 / 반대 )한다. 단, ______.','처음에는 ______라고 생각했지만, 자료를 보니 ______.']}
+];
+
+const STEPS = ['시작','논제 고르기','자료실','개요 짜기','근거문 쓰기','완성'];
+
+/* ---------- 상태 ---------- */
+const KEY='stat-opinion-v1';
+let S = load();
+let step = S.step||0;
+let EX = {x:null,y:null,g:'',gf:'',sel:null,rep:null,showOut:true,sort:null,sortDesc:true};
+function blank(){return {info:{ban:'',no:'',name:''},ds:null,stance:{},star:null,split:'',think:'',ex:{},basket:[],
+ o:{1:{s:'',k:''},2:{s:'',k:'',r:'',rep:''},3:{s:'',k:'',cards:[],more:''},4:{s:'',k:'',final:''}},
+ e:{1:'',2:'',3:'',4:''},self:{},fs:22,step:0,fb:{outline:{n:0,text:''},essay:{n:0,text:''}}};}
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&v.o)return Object.assign(blank(),v);}catch(e){}return blank();}
+function save(){try{S.step=step;localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function ds(){return DATA.find(d=>d.id===S.ds);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1600);}
+function fontStep(d){S.fs=Math.max(16,Math.min(32,(S.fs||22)+d));document.documentElement.style.fontSize=S.fs+'px';save();}
+function setPath(path,val){const ks=path.split('.');let o=S;for(let i=0;i<ks.length-1;i++)o=o[ks[i]];o[ks[ks.length-1]]=val;save();}
+function getPath(path){return path.split('.').reduce((o,k)=>o==null?o:o[k],S);}
+function topicText(){const d=ds();return d&&S.star!=null?TOPICS[d.id][S.star][1]:'';}
+
+/* ---------- 통계 계산 ---------- */
+const mean=a=>a.reduce((s,v)=>s+v,0)/a.length;
+function median(a){const b=[...a].sort((x,y)=>x-y),n=b.length;return n%2?b[(n-1)/2]:(b[n/2-1]+b[n/2])/2;}
+function sd(a){const m=mean(a);return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/a.length);}
+function corr(xs,ys){const mx=mean(xs),my=mean(ys);let a=0,b=0,c=0;for(let i=0;i<xs.length;i++){const dx=xs[i]-mx,dy=ys[i]-my;a+=dx*dy;b+=dx*dx;c+=dy*dy;}return a/Math.sqrt(b*c);}
+function fmt(v,k){if(v==null||isNaN(v))return '-';const a=Math.abs(v);if(a>=1000)return Math.round(v).toLocaleString('ko-KR');if(a>=100)return (Math.round(v*10)/10).toString();if(a>=10)return (Math.round(v*10)/10).toString();return (Math.round(v*100)/100).toString();}
+function vlabel(d,k){return d.vars[k][0];}
+function vunit(d,k){return d.vars[k][1];}
+function withUnit(d,k,v){const u=vunit(d,k);return fmt(v)+(u?u==='%'?'%':' '+u:'');}
+
+/* ---------- 내비게이션 ---------- */
+function canGo(i){if(i<=0)return true;if(!S.ds)return false;if(i>=3&&S.star==null)return false;return true;}
+function go(i){
+  if(i<0||i>=STEPS.length)return;
+  if(!canGo(i)){toast(!S.ds?'먼저 우리 모둠 자료를 골라요':'먼저 글로 쓸 논제에 ★를 찍어요');return;}
+  step=i;save();render();window.scrollTo({top:0});
+}
+function renderNav(){
+  document.getElementById('nav').innerHTML=STEPS.map((s,i)=>`<span class="step ${i===step?'on':(i<step?'done':'')}" onclick="go(${i})">${i+1}. ${s}</span>`).join('');
+  const I=S.info;document.getElementById('who').textContent=(I.name?`${I.ban||'?'}반 ${I.no||'?'}번 ${I.name}`:'')+(S.ds?`  ·  자료 ${S.ds}번`:'');
+  document.getElementById('prevBtn').disabled=step===0;
+  const nb=document.getElementById('nextBtn');nb.style.visibility=step===STEPS.length-1?'hidden':'visible';
+}
+function render(){
+  renderNav();
+  const m=document.getElementById('main');
+  m.innerHTML=[viewStart,viewTopic,viewLab,viewOutline,viewEssay,viewDone][step]();
+  after();
+}
+let afterFns=[];
+function after(){afterFns.forEach(f=>f());afterFns=[];
+  document.querySelectorAll('[data-b]').forEach(el=>{
+    const p=el.dataset.b;el.value=getPath(p)??'';
+    el.addEventListener('input',()=>{setPath(p,el.value);if(el.dataset.live)window[el.dataset.live](el);if(p.startsWith('info'))renderNav();});
+  });
+  document.querySelectorAll('textarea[data-live]').forEach(el=>window[el.dataset.live](el));
+}
+
+/* ---------- AI 질문 도우미 ---------- */
+function aiBox(kind){
+  const d=ds(),t=topicText()||'(내가 고른 논제)';
+  const v=d?`${vlabel(d,d.x)}와(과) ${vlabel(d,d.y)}`:'';
+  const P={
+   topic:[`나는 중학교 3학년이고, 나라별 통계 자료(${v})를 분석했어. ‘${t}’라는 논제로 글을 쓰려고 해. 답이나 글은 알려 주지 말고, 내가 찬성과 반대 중 무엇을 고를지 스스로 생각해 볼 수 있게 질문을 3개만 해 줘.`,
+          `‘${t}’라는 논제에 답하려면 어떤 두 가지의 관계를 살펴봐야 할지, 정답은 말하지 말고 힌트가 되는 질문만 해 줘.`],
+   lab:[`내가 그린 산점도에서 상관계수가 ( )이 나왔어. 이 값이 무엇을 뜻하는지 내가 먼저 설명해 볼게: “______”. 내 설명이 맞는지, 고칠 점만 짚어 줘.`,
+        `특이점(유난히 튀는 나라)을 빼고 다시 봤더니 상관계수가 ( )에서 ( )로 바뀌었어. 이 변화를 해석할 때 무엇을 생각해야 하는지 질문으로만 알려 줘.`],
+   outline:[`내 글 개요야. [사진 또는 붙여 넣기] 논제는 ‘${t}’야. 고친 문장을 써 주지 말고, 근거가 부족한 문단이 어디인지와 그 이유만 알려 줘.`,
+            `내 분석 결과만으로는 ‘${t}’에 답하기 어려운 부분이 있어. 어떤 자료가 더 있으면 좋을지, 내가 스스로 떠올릴 수 있게 질문해 줘.`],
+   essay:[`내가 쓴 문단이야: “______”. 개요문(중심 문장)과 근거문이 잘 이어지는지 점검해 줘. 문장을 대신 고쳐 쓰지 말고, 어느 부분이 부족한지만 말해 줘.`,
+          `내 글에서 수치를 근거로 쓴 문장이 정확한지 확인하고 싶어. 수치와 해석이 어긋나는 곳이 있으면 질문으로 알려 줘.`]
+  }[kind];
+  return `<details class="ai"><summary>📋 ChatGPT에 복사해서 물어보기 (선택)</summary>
+   <div class="muted">AI는 <b>답을 주는 친구가 아니라 질문해 주는 친구</b>예요. AI가 써 준 문장을 그대로 옮기면 내 글이 아니에요.</div>
+   ${P.map(p=>`<div class="prompt"><span>${esc(p)}</span><button class="mini" onclick="copyText(this.previousElementSibling.textContent)">복사</button></div>`).join('')}
+  </details>`;
+}
+function copyText(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('복사했어요')).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('복사했어요');});}
+
+/* ---------- AI 코치 (Apps Script 중계) ---------- */
+function fbState(kind){if(!S.fb)S.fb={};return S.fb[kind]||(S.fb[kind]={n:0,text:''});}
+function aiPanel(kind){
+  const F=fbState(kind),left=AI_LIMIT-F.n;
+  const title=kind==='outline'?'🤖 AI 코치에게 개요 점검받기':'🤖 AI 코치에게 글 다듬기 피드백 받기';
+  const desc=kind==='outline'?'1~4문단 개요를 다 쓴 뒤에 눌러요. AI는 글을 대신 써 주지 않고, 부족한 곳을 질문으로 알려 줘요.':'4문단을 다 쓴 뒤에 눌러요. 맞춤법과 근거가 잘 이어지는지 알려 줘요. 고칠 문장은 내가 직접 고쳐요.';
+  return `<div class="card" style="border:2px solid #8a5cc2;background:#fbf9ff"><h3 style="color:#6a4fb0">${title}</h3>
+   <p class="lead">${desc}</p>
+   ${AI_URL?`<div class="row"><button class="fill" style="background:#6a4fb0;border-color:#6a4fb0" id="aiBtn_${kind}" onclick="callAI('${kind}')" ${left<=0?'disabled':''}>${left>0?'피드백 받기':'횟수를 다 썼어요'}</button><span class="muted">남은 횟수 ${Math.max(0,left)} / ${AI_LIMIT}</span></div>`:'<div class="muted">선생님이 아직 AI 연결을 켜지 않았어요. 아래 ‘ChatGPT에 복사해서 물어보기’를 써 보세요.</div>'}
+   <div id="aiOut_${kind}" style="margin-top:.6rem">${F.text?fbHtml(F.text):''}</div></div>`;
+}
+function fbHtml(t){return `<div class="essay-out" style="font-size:.9rem;line-height:1.75;background:#fff">${esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/^#+\s*/gm,'')}</div><div class="muted" style="margin-top:.3rem">AI의 말이 항상 맞지는 않아요. 내 자료와 비교해 보고, 받아들일지는 내가 정해요.</div>`;}
+function dataSummary(){
+  const d=ds(),ks=numKeys(d),lines=[`자료 ${d.id}번 ${d.title} (${d.rows.length}개 ${d.unit})`];
+  lines.push('변수: '+ks.map(k=>vlabel(d,k)+(vunit(d,k)?'('+vunit(d,k)+')':'')).join(', '));
+  for(let i=0;i<ks.length;i++)for(let j=i+1;j<ks.length;j++){const a=d.rows.filter(r=>r[ks[i]]!=null&&r[ks[j]]!=null);if(a.length>2)lines.push(`상관계수 ${vlabel(d,ks[i])} × ${vlabel(d,ks[j])}: ${corr(a.map(r=>r[ks[i]]),a.map(r=>r[ks[j]])).toFixed(2)} (${a.length}개)`);}
+  const g=groupKeys(d)[0];
+  ks.forEach(k=>{const parts=Object.entries(d.groups[g][1]).map(([c,n])=>{const a=d.rows.filter(r=>r[g]===c&&r[k]!=null).map(r=>r[k]);return a.length?`${n} 평균 ${fmt(mean(a))}·중앙값 ${fmt(median(a))}`:''}).filter(Boolean);lines.push(`${vlabel(d,k)}: ${parts.join(' / ')}`);});
+  if(d.home){const h=d.rows.find(r=>r.name===d.home);if(h)lines.push(`${d.home}: `+ks.map(k=>vlabel(d,k)+' '+(h[k]==null?'없음':fmt(h[k]))).join(', '));}
+  const ex=exList();if(ex.length)lines.push('학생이 자료실에서 뺀 곳: '+ex.join(', '));
+  return lines.join('\n');
+}
+function outlineText(){
+  const o=S.o;return [`처음 입장: ${S.stance[S.star]||'안 정함'} / 지금 결론: ${o[4].final||'안 정함'}`,
+   `1문단 개요문: ${o[1].s}\n근거: ${o[1].k}`,
+   `2문단 개요문: ${o[2].s}\n근거: ${o[2].k}\n상관계수: ${o[2].r} / 대푯값: ${o[2].rep}`,
+   `3문단 개요문: ${o[3].s}\n근거: ${o[3].k}\n고른 한계 카드: ${o[3].cards.join(', ')||'없음'} / 더 본 자료: ${o[3].more}`,
+   `4문단 개요문: ${o[4].s}\n근거: ${o[4].k}`].join('\n\n');
+}
+function essayText(){return `처음 입장: ${S.stance[S.star]||'안 정함'} / 개요의 결론: ${S.o[4].final||'안 정함'}\n\n`+[1,2,3,4].map(n=>`${n}문단: ${S.e[n].trim()||'(비어 있음)'}`).join('\n\n');}
+async function callAI(kind){
+  const F=fbState(kind);if(F.n>=AI_LIMIT)return;
+  const filled=kind==='outline'?[1,2,3,4].filter(n=>S.o[n].s.trim()).length:[1,2,3,4].filter(n=>S.e[n].trim()).length;
+  if(filled<3&&!confirm('아직 비어 있는 문단이 많아요. 그래도 피드백을 받을까요? (횟수가 1번 줄어요)'))return;
+  const btn=document.getElementById('aiBtn_'+kind),box=document.getElementById('aiOut_'+kind);
+  btn.disabled=true;btn.textContent='AI가 읽는 중… (10~20초)';
+  try{
+    const res=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({kind,topic:topicText(),data:dataSummary(),text:kind==='outline'?outlineText():essayText()})});
+    const j=await res.json();
+    if(!j.ok)throw new Error(j.msg||'오류');
+    F.n++;F.text=j.text;save();render();
+    setTimeout(()=>{const b=document.getElementById('aiOut_'+kind);if(b)b.scrollIntoView({behavior:'smooth',block:'center'});},100);
+  }catch(err){box.innerHTML=`<div class="warn">${esc(err.message&&err.message!=='Failed to fetch'?err.message:'AI에 연결하지 못했어요. 인터넷을 확인하고 다시 눌러 보세요.')} (횟수는 줄지 않았어요)</div>`;btn.disabled=false;btn.textContent='다시 받기';}
+}
+
+/* ---------- 1. 시작 ---------- */
+function viewStart(){
+  return `<div class="card"><h2>👋 반가워요!</h2>
+   <p class="lead">우리 모둠이 분석한 통계를 근거로, 사회 논제에 대한 <b>나의 의견</b>을 글로 써 봐요. 쓴 내용은 이 기기에 자동으로 저장돼요.</p>
+   <div class="row">
+    <div style="flex:1;min-width:5rem"><label>반</label><input type="text" inputmode="numeric" data-b="info.ban"></div>
+    <div style="flex:1;min-width:5rem"><label>번호</label><input type="text" inputmode="numeric" data-b="info.no"></div>
+    <div style="flex:2;min-width:8rem"><label>이름</label><input type="text" data-b="info.name"></div>
+   </div></div>
+   <div class="card"><h2>📁 우리 모둠 자료는?</h2><p class="lead">2차시에 통그라미로 분석한 자료 번호를 골라요.</p>
+   <div class="dsgrid">${DATA.map(d=>`<div class="ds ${S.ds===d.id?'on':''}" onclick="pickDs(${d.id})"><span class="no">${d.id}</span><b>${d.title}</b><small>${d.sub} · ${d.rows.length}개 ${d.unit}</small></div>`).join('')}</div>
+   </div>
+   <div class="card"><h3>오늘의 흐름</h3>
+   <div class="muted">① 논제 고르기 → ② 자료실에서 근거 찾기 → ③ 개요 짜기 → ④ 개요문 + 근거문으로 쓰기 → ⑤ 점검하고 완성</div>
+   <div style="margin-top:.6rem"><button class="mini" onclick="resetAll()">처음부터 다시 하기(모두 지우기)</button></div></div>`;
+}
+function pickDs(id){if(S.ds&&S.ds!==id&&(S.star!=null||S.o[1].s)){if(!confirm('자료를 바꾸면 고른 논제가 지워져요. 바꿀까요?'))return;S.stance={};S.star=null;}
+  S.ds=id;EX.x=null;save();render();}
+function resetAll(){if(confirm('지금까지 쓴 내용이 모두 지워져요. 정말 지울까요?')){const fs=S.fs;S=blank();S.fs=fs;step=0;save();render();}}
+
+/* ---------- 2. 논제 고르기 ---------- */
+function viewTopic(){
+  const d=ds();if(!d)return '<div class="card">먼저 자료를 골라요.</div>';
+  const T=TOPICS[d.id];
+  return `<div class="card"><h2>🗳️ 자료 ${d.id}. ${d.title} — 논제 5개</h2>
+   <p class="lead">① 논제마다 지금 내 생각(찬성/반대)을 눌러요. ② 글로 쓰고 싶은 논제 하나에 ★를 눌러요. 찬반은 마지막에 다시 정할 수 있어요.</p>
+   <div class="legend"><span><span class="badge g">바로</span> 우리 자료로 바로 답할 수 있어요</span><span><span class="badge y">일부</span> 일부만 — 한계를 꼭 써요</span><span><span class="badge r">추가</span> 다른 자료가 더 필요해요 — “그 자료에 의하면”</span></div>
+   ${T.map((t,i)=>`<div class="topic ${S.star===i?'star':''}">
+     <span class="badge ${t[0]}">${{g:'바로',y:'일부',r:'추가'}[t[0]]}</span> <span class="muted">논제 ${i+1}</span>
+     <div class="t">${esc(t[1])}</div>
+     <div class="hint">💡 ${esc(t[2])}</div>
+     <div class="row pick">
+      <button class="pro ${S.stance[i]==='찬성'?'on':''}" onclick="setStance(${i},'찬성')">찬성</button>
+      <button class="con ${S.stance[i]==='반대'?'on':''}" onclick="setStance(${i},'반대')">반대</button>
+      <button class="starbtn ${S.star===i?'on':''}" onclick="setStar(${i})">★ 이 논제로 쓸래요</button>
+     </div></div>`).join('')}
+   </div>
+   ${S.star!=null?`<div class="card"><h3>🤔 ★ 논제: ${esc(T[S.star][1])}</h3>
+    <div class="q">이 논제에 답하려면 무엇과 무엇의 관계를 봐야 할까? (개요 1문단으로 이어져요)</div>
+    <div class="chips">${Object.keys(d.vars).map(k=>`<span class="chip" onclick="addThink('${esc(vlabel(d,k))}')">${esc(vlabel(d,k))}</span>`).join('')}</div>
+    <textarea data-b="think" placeholder="예) ○○와 ○○의 관계를 봐야 한다. 왜냐하면…"></textarea></div>`:''}
+   ${aiBox('topic')}`;
+}
+function setStance(i,v){S.stance[i]=S.stance[i]===v?undefined:v;save();render();}
+function setStar(i){S.star=S.star===i?null:i;save();render();}
+function addThink(w){S.think=(S.think?S.think+' ':'')+w;save();render();}
+
+/* ---------- 3. 자료실 ---------- */
+function exList(){const d=ds();return S.ex[d.id]||(S.ex[d.id]=[]);}
+function numKeys(d){return Object.keys(d.vars);}
+function groupKeys(d){return Object.keys(d.groups);}
+function viewLab(){
+  const d=ds();if(!d)return '<div class="card">먼저 자료를 골라요.</div>';
+  if(!EX.x||!d.vars[EX.x]){EX.x=d.x;EX.y=d.y;EX.g=groupKeys(d)[0];EX.gf='';EX.sel=null;EX.rep=d.y;}
+  const opt=(sel)=>numKeys(d).map(k=>`<option value="${k}" ${k===sel?'selected':''}>${esc(vlabel(d,k))}${vunit(d,k)?' ('+vunit(d,k)+')':''}</option>`).join('');
+  const G=d.groups[EX.g];
+  afterFns.push(drawAll);
+  return `<div class="card"><h2>🔬 자료실 — 우리 자료 다시 보기</h2>
+   <p class="lead">통그라미에서는 점에 나라 이름이 안 보였죠? 여기서는 <b>점을 누르면 이름</b>이 보이고, <b>튀는 곳을 빼고</b> 다시 볼 수 있어요. 근거로 쓸 결과는 <b>⭐ 근거 바구니에 담기</b>를 눌러 모아 두세요.</p>
+   <div class="row">
+    <div style="flex:1;min-width:10rem"><label>x축</label><select onchange="EX.x=this.value;drawAll()">${opt(EX.x)}</select></div>
+    <div style="flex:1;min-width:10rem"><label>y축</label><select onchange="EX.y=this.value;drawAll()">${opt(EX.y)}</select></div>
+    <div style="flex:1;min-width:8rem"><label>집단 나누기</label><select onchange="EX.g=this.value;EX.gf='';render()">${groupKeys(d).map(k=>`<option value="${k}" ${k===EX.g?'selected':''}>${d.groups[k][0]}</option>`).join('')}</select></div>
+   </div>
+   <div class="chips" style="margin-top:.5rem"><span class="muted">볼 범위:</span>
+    <span class="chip ${EX.gf===''?'on':''}" onclick="EX.gf='';render()">전체</span>
+    ${Object.entries(G[1]).filter(([c])=>d.rows.some(r=>r[EX.g]===c)).map(([c,n])=>`<span class="chip ${EX.gf===c?'on':''}" onclick="EX.gf='${c}';render()">${n}만</span>`).join('')}
+   </div>
+   <div id="plotWrap"></div>
+   <div class="rbox"><div><div class="muted">상관계수</div><div class="rnum" id="rnum">-</div><div class="muted" id="rn"></div></div>
+    <div class="scale"><div class="bar"></div><div class="mk" id="mk"></div>
+     <span class="lb" style="left:0%">-1</span><span class="lb" style="left:20%">음의 상관</span><span class="lb" style="left:50%">0 (거의 없음)</span><span class="lb" style="left:80%">양의 상관</span><span class="lb" style="left:100%">1</span></div></div>
+   <div class="info" id="info">점을 누르면 그 ${d.unit}의 이름과 값이 나와요. <span style="color:var(--home)">★</span> = ${d.home||'(이 자료에는 대한민국이 없어요)'}</div>
+   <div class="row" style="margin-top:.6rem">
+    <label><input type="checkbox" ${EX.showOut?'checked':''} onchange="EX.showOut=this.checked;drawAll()"> 특이점 표시 (주황 테두리)</label>
+    <button class="mini" onclick="dropOutliers()">특이점 모두 빼기</button>
+    <button class="mini" onclick="S.ex[ds().id]=[];save();drawAll()">뺀 곳 모두 되돌리기</button>
+    <button class="mini fill" onclick="addScatter()">⭐ 근거 바구니에 담기</button>
+   </div>
+   <div class="muted" id="exl" style="margin-top:.3rem"></div>
+   <div class="muted" style="margin-top:.3rem">※ 특이점: 평균에서 표준편차의 2.5배보다 더 떨어진 곳 (x나 y 중 하나라도)</div>
+  </div>
+
+  <div class="card"><h2>📏 대푯값 · 산포도 비교</h2>
+   <div class="row"><div style="flex:1;min-width:12rem"><label>볼 변수</label><select onchange="EX.rep=this.value;drawRep()">${opt(EX.rep)}</select></div>
+   <div class="muted" style="flex:2">집단은 위에서 고른 <b>${G[0]}</b>(으)로 나눠요. 뺀 ${d.unit}는 계산에서 빠져요.</div></div>
+   <div id="repWrap" style="margin-top:.6rem"></div>
+   <div class="row" style="margin-top:.5rem"><button class="mini fill" onclick="addRep()">⭐ 근거 바구니에 담기</button></div>
+  </div>
+
+  <div class="card"><h2>📋 자료 표</h2><p class="lead">제목을 누르면 정렬돼요. 순위나 이름을 찾을 때 써요.</p><div class="tbl-wrap" id="tblWrap"></div></div>
+
+  <div class="card basket"><h3>⭐ 근거 바구니 <span class="muted">(개요 짜기에서 꺼내 써요)</span></h3><div id="bk"></div></div>
+  ${aiBox('lab')}`;
+}
+function pts(){
+  const d=ds(),ex=exList();
+  return d.rows.filter(r=>r[EX.x]!=null&&r[EX.y]!=null&&(EX.gf===''||r[EX.g]===EX.gf)).map(r=>({r,x:r[EX.x],y:r[EX.y],out:ex.includes(r.name)}));
+}
+function outlierSet(P){
+  const a=P;if(a.length<4)return new Set();
+  const xs=a.map(p=>p.x),ys=a.map(p=>p.y),mx=mean(xs),my=mean(ys),sx=sd(xs),sy=sd(ys);
+  return new Set(a.filter(p=>Math.abs(p.x-mx)>2.5*sx||Math.abs(p.y-my)>2.5*sy).map(p=>p.r.name));
+}
+const PAL=['#2f6f8f','#e07a2f','#3c9b5a','#8a5cc2','#c2408a','#8a7a2f'];
+function niceTicks(lo,hi,n=5){if(lo===hi){lo-=1;hi+=1;}const span=hi-lo,step0=span/n,mag=10**Math.floor(Math.log10(step0)),st=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=step0);const a=Math.floor(lo/st)*st,b=Math.ceil(hi/st)*st,t=[];for(let v=a;v<=b+st/2;v+=st)t.push(+v.toFixed(10));return t;}
+function drawAll(){drawScatter();drawRep();drawTable();drawBasket();}
+function drawScatter(){
+  const d=ds(),P=pts(),O=outlierSet(P),W=640,H=430,ml=70,mr=20,mt=18,mb=58;
+  const inc=P.filter(p=>!p.out);
+  const xs=P.map(p=>p.x),ys=P.map(p=>p.y);
+  const tx=niceTicks(Math.min(...xs),Math.max(...xs)),ty=niceTicks(Math.min(...ys),Math.max(...ys));
+  const X=v=>ml+(v-tx[0])/(tx[tx.length-1]-tx[0])*(W-ml-mr),Y=v=>H-mb-(v-ty[0])/(ty[ty.length-1]-ty[0])*(H-mt-mb);
+  const codes=Object.keys(d.groups[EX.g][1]);
+  let s=`<svg class="plot" viewBox="0 0 ${W} ${H}">`;
+  tx.forEach(t=>{s+=`<line x1="${X(t)}" x2="${X(t)}" y1="${mt}" y2="${H-mb}" stroke="#eee"/><text x="${X(t)}" y="${H-mb+18}" font-size="12" text-anchor="middle" fill="#666">${fmt(t)}</text>`;});
+  ty.forEach(t=>{s+=`<line x1="${ml}" x2="${W-mr}" y1="${Y(t)}" y2="${Y(t)}" stroke="#eee"/><text x="${ml-6}" y="${Y(t)+4}" font-size="12" text-anchor="end" fill="#666">${fmt(t)}</text>`;});
+  s+=`<text x="${(ml+W-mr)/2}" y="${H-12}" font-size="14" text-anchor="middle" fill="#333">${esc(vlabel(d,EX.x))}${vunit(d,EX.x)?' ('+vunit(d,EX.x)+')':''}</text>`;
+  s+=`<text transform="translate(16 ${(mt+H-mb)/2}) rotate(-90)" font-size="14" text-anchor="middle" fill="#333">${esc(vlabel(d,EX.y))}${vunit(d,EX.y)?' ('+vunit(d,EX.y)+')':''}</text>`;
+  const order=[...P].sort((a,b)=>(a.r.name===d.home)-(b.r.name===d.home));
+  order.forEach((p,i)=>{
+    const cx=X(p.x),cy=Y(p.y),home=p.r.name===d.home,sel=EX.sel===p.r.name,isO=EX.showOut&&O.has(p.r.name);
+    const col=PAL[codes.indexOf(p.r[EX.g])%PAL.length];
+    const nm=esc(p.r.name).replace(/'/g,'');
+    let g=`<g style="cursor:pointer" onclick="selPt('${nm}')"><circle cx="${cx}" cy="${cy}" r="14" fill="transparent"/>`;
+    if(p.out) g+=`<circle cx="${cx}" cy="${cy}" r="6" fill="#fff" stroke="#bbb" stroke-width="2" stroke-dasharray="3 2"/>`;
+    else if(home) g+=`<text x="${cx}" y="${cy+8}" font-size="24" text-anchor="middle" fill="var(--home)">★</text>`;
+    else g+=`<circle cx="${cx}" cy="${cy}" r="6.5" fill="${col}" fill-opacity=".75" stroke="#fff"/>`;
+    if(isO&&!p.out) g+=`<circle cx="${cx}" cy="${cy}" r="11" fill="none" stroke="#f08a00" stroke-width="3"/>`;
+    if(sel) g+=`<circle cx="${cx}" cy="${cy}" r="14" fill="none" stroke="#222" stroke-width="2"/>`;
+    if(home||sel||(isO&&!p.out)) g+=`<text x="${cx+11}" y="${cy-9}" font-size="13" font-weight="700" fill="${home?'#d7263d':'#333'}" paint-order="stroke" stroke="#fff" stroke-width="3">${esc(p.r.name)}</text>`;
+    s+=g+'</g>';
+  });
+  s+='</svg>';
+  const leg=codes.filter(c=>P.some(p=>p.r[EX.g]===c)).map(c=>`<span><span style="display:inline-block;width:.8rem;height:.8rem;border-radius:50%;background:${PAL[codes.indexOf(c)%PAL.length]};vertical-align:middle"></span> ${d.groups[EX.g][1][c]}</span>`).join('');
+  document.getElementById('plotWrap').innerHTML=`<div class="legend" style="margin-top:.6rem">${leg}<span><span style="color:var(--home)">★</span> ${d.home||''}</span><span>◌ 뺀 곳</span></div>`+s;
+  const r=inc.length>2?corr(inc.map(p=>p.x),inc.map(p=>p.y)):NaN;
+  document.getElementById('rnum').textContent=isNaN(r)?'-':r.toFixed(2);
+  document.getElementById('rn').textContent=`${inc.length}개 ${d.unit}`;
+  document.getElementById('mk').style.left=isNaN(r)?'50%':((r+1)/2*100)+'%';
+  const ex=exList();document.getElementById('exl').textContent=ex.length?`뺀 ${d.unit}: ${ex.join(', ')}`:'';
+  if(EX.sel)showInfo(EX.sel);
+}
+function selPt(name){EX.sel=name;drawScatter();}
+function showInfo(name){
+  const d=ds(),r=d.rows.find(r=>r.name===name);if(!r)return;const out=exList().includes(name);
+  const vals=numKeys(d).map(k=>`${vlabel(d,k)} <b>${r[k]==null?'자료 없음':withUnit(d,k,r[k])}</b>`).join(' · ');
+  const extra=r.yr?` · 아동노동 조사 연도 ${esc(r.yr)}`:'';
+  document.getElementById('info').innerHTML=`<b style="font-size:1.05rem">${esc(name)}</b> (${Object.keys(d.groups).map(g=>d.groups[g][1][r[g]]).join(', ')})<br>${vals}${extra}<br>
+   <button class="mini" style="margin-top:.3rem" onclick="toggleEx('${esc(name).replace(/'/g,'')}')">${out?'↩ 다시 넣기':'✂ 이 '+d.unit+' 빼고 보기'}</button>`;
+}
+function toggleEx(name){const ex=exList(),i=ex.indexOf(name);if(i>=0)ex.splice(i,1);else ex.push(name);save();drawAll();}
+function dropOutliers(){const O=outlierSet(pts());if(!O.size){toast('지금 범위에는 특이점이 없어요');return;}const ex=exList();if([...O].every(n=>ex.includes(n))){toast('특이점은 이미 모두 뺐어요');return;}O.forEach(n=>{if(!ex.includes(n))ex.push(n);});save();drawAll();toast(`${[...O].join(', ')}을(를) 뺐어요`);}
+function scopeText(){const d=ds();return EX.gf===''?'전체':d.groups[EX.g][1][EX.gf]+'만';}
+function addScatter(){
+  const d=ds(),inc=pts().filter(p=>!p.out);if(inc.length<3)return;
+  const r=corr(inc.map(p=>p.x),inc.map(p=>p.y)),ex=exList().filter(n=>pts().some(p=>p.r.name===n));
+  addBasket(`[산점도] ${vlabel(d,EX.x)} × ${vlabel(d,EX.y)} · ${scopeText()} ${inc.length}개 ${d.unit}${ex.length?' (뺀 곳: '+ex.join(', ')+')':''} → 상관계수 ${r.toFixed(2)}`);
+}
+function repStats(){
+  const d=ds(),k=EX.rep,ex=exList(),codes=Object.keys(d.groups[EX.g][1]);
+  const rows=d.rows.filter(r=>r[k]!=null&&!ex.includes(r.name));
+  const groups=[{name:'전체',rs:rows}].concat(codes.map(c=>({name:d.groups[EX.g][1][c],rs:rows.filter(r=>r[EX.g]===c)})).filter(g=>g.rs.length));
+  return groups.map(g=>{const a=g.rs.map(r=>r[k]);const mx=g.rs.reduce((p,c)=>c[k]>p[k]?c:p),mn=g.rs.reduce((p,c)=>c[k]<p[k]?c:p);
+    return {name:g.name,n:a.length,mean:mean(a),med:median(a),sd:sd(a),mx,mn,vals:g.rs};});
+}
+function drawRep(){
+  const d=ds(),k=EX.rep,G=repStats();
+  let h=`<div style="overflow:auto"><table><tr><th>집단</th><th>개수</th><th>평균</th><th>중앙값</th><th>표준편차</th><th>가장 큰 곳</th><th>가장 작은 곳</th></tr>`;
+  G.forEach(g=>{h+=`<tr><td>${g.name}</td><td>${g.n}</td><td>${fmt(g.mean)}</td><td>${fmt(g.med)}</td><td>${fmt(g.sd)}</td><td>${esc(g.mx.name)} (${fmt(g.mx[k])})</td><td>${esc(g.mn.name)} (${fmt(g.mn[k])})</td></tr>`;});
+  h+='</table></div>';
+  if(d.home){const all=d.rows.filter(r=>r[k]!=null),hr=all.find(r=>r.name===d.home);
+    if(hr){const rank=all.filter(r=>r[k]>hr[k]).length+1;h+=`<div class="ref" style="margin-top:.5rem"><b>${d.home}</b>: ${withUnit(d,k,hr[k])} — ${all.length}개 ${d.unit} 중 큰 쪽부터 <b>${rank}위</b> (작은 쪽부터 ${all.length-rank+1}위)</div>`;}
+    else h+=`<div class="ref muted">${d.home}는 이 변수 자료가 없어요.</div>`;}
+  // 점 그래프
+  const all=G[0].vals.map(r=>r[k]),lo=Math.min(...all),hi=Math.max(...all),t=niceTicks(lo,hi),W=640,rowH=46,ml=120,mr=20,H=G.length*rowH+40;
+  const X=v=>ml+(v-t[0])/(t[t.length-1]-t[0])*(W-ml-mr);
+  let s=`<svg class="plot" viewBox="0 0 ${W} ${H}" style="margin-top:.5rem">`;
+  t.forEach(v=>{s+=`<line x1="${X(v)}" x2="${X(v)}" y1="8" y2="${H-28}" stroke="#eee"/><text x="${X(v)}" y="${H-10}" font-size="12" text-anchor="middle" fill="#666">${fmt(v)}</text>`;});
+  G.forEach((g,i)=>{const cy=20+i*rowH;
+    s+=`<text x="${ml-8}" y="${cy+5}" font-size="13" text-anchor="end" fill="#333">${g.name}</text>`;
+    g.vals.forEach((r,j)=>{const home=r.name===d.home;s+=home?`<text x="${X(r[k])}" y="${cy+8}" font-size="20" text-anchor="middle" fill="var(--home)">★</text>`:`<circle cx="${X(r[k])}" cy="${cy+((j%3)-1)*5}" r="4.5" fill="#2f6f8f" fill-opacity=".45"><title>${esc(r.name)} ${fmt(r[k])}</title></circle>`;});
+    s+=`<line x1="${X(g.mean)}" x2="${X(g.mean)}" y1="${cy-15}" y2="${cy+15}" stroke="#c2512f" stroke-width="3"/><line x1="${X(g.med)}" x2="${X(g.med)}" y1="${cy-15}" y2="${cy+15}" stroke="#2f8f5b" stroke-width="3" stroke-dasharray="5 3"/>`;
+  });
+  s+='</svg>';
+  h+=s+`<div class="legend" style="margin-top:.3rem"><span><b style="color:#c2512f">━</b> 평균</span><span><b style="color:#2f8f5b">┅</b> 중앙값</span><span>평균과 중앙값이 멀리 떨어져 있으면, 어느 쪽이 대부분의 ${d.unit}를 더 잘 대표할까?</span></div>`;
+  document.getElementById('repWrap').innerHTML=h;
+}
+function addRep(){
+  const d=ds(),G=repStats(),k=EX.rep,ex=exList();
+  addBasket(`[대푯값] ${vlabel(d,k)}${vunit(d,k)?'('+vunit(d,k)+')':''}${ex.length?' (뺀 곳: '+ex.join(', ')+')':''} → `+G.map(g=>`${g.name} ${g.n}개: 평균 ${fmt(g.mean)}, 중앙값 ${fmt(g.med)}, 표준편차 ${fmt(g.sd)}`).join(' / '));
+}
+function drawTable(){
+  const d=ds(),ks=numKeys(d),ex=exList();let rows=[...d.rows];
+  if(EX.sort){rows.sort((a,b)=>{const A=a[EX.sort],B=b[EX.sort];if(A==null)return 1;if(B==null)return -1;return (typeof A==='string'?A.localeCompare(B):A-B)*(EX.sortDesc?-1:1);});}
+  let h=`<table><tr><th onclick="sortBy('name')" style="cursor:pointer">${d.unit} ⇅</th>${groupKeys(d).map(g=>`<th>${d.groups[g][0]}</th>`).join('')}${ks.map(k=>`<th onclick="sortBy('${k}')" style="cursor:pointer">${esc(vlabel(d,k))} ⇅</th>`).join('')}</tr>`;
+  rows.forEach(r=>{const home=r.name===d.home,o=ex.includes(r.name);h+=`<tr style="${home?'background:#ffecef;font-weight:700':''}${o?';color:#aaa;text-decoration:line-through':''}"><td class="l">${esc(r.name)}</td>${groupKeys(d).map(g=>`<td>${d.groups[g][1][r[g]]}</td>`).join('')}${ks.map(k=>`<td>${r[k]==null?'-':fmt(r[k])}</td>`).join('')}</tr>`;});
+  document.getElementById('tblWrap').innerHTML=h+'</table>';
+}
+function sortBy(k){if(EX.sort===k)EX.sortDesc=!EX.sortDesc;else{EX.sort=k;EX.sortDesc=k!=='name';}drawTable();}
+function addBasket(t){if(S.basket.includes(t)){toast('이미 담겨 있어요');return;}S.basket.push(t);save();toast('근거 바구니에 담았어요 ⭐');if(document.getElementById('bk'))drawBasket();}
+function drawBasket(){const el=document.getElementById('bk');if(!el)return;
+  el.innerHTML=S.basket.length?S.basket.map((b,i)=>`<div class="bitem"><span>${esc(b)}</span><button class="mini" onclick="S.basket.splice(${i},1);save();drawBasket()">빼기</button></div>`).join(''):'<div class="muted">아직 비어 있어요. 위에서 ⭐ 근거 바구니에 담기를 눌러요.</div>';}
+
+/* ---------- 4. 개요 짜기 ---------- */
+function viewOutline(){
+  const d=ds(),t=topicText(),first=S.stance[S.star];
+  const bchips=(n)=>S.basket.length?`<div class="chips"><span class="muted">⭐ 바구니에서 꺼내기:</span>${S.basket.map((b,i)=>`<span class="chip" title="${esc(b)}" onclick="insertBasket(${n},${i})">${esc(b.slice(0,28))}…</span>`).join('')}</div>`:`<div class="muted">자료실에서 근거를 담아 오면 여기서 바로 꺼내 쓸 수 있어요.</div>`;
+  const P=(n,extra)=>{const p=PARAS[n-1];return `<div class="card para"><h3><span class="pnum">${n}</span>${p.name}</h3><div class="q">❓ ${p.q}</div>
+   <div class="fields"><div><label>개요문 (한 줄, 중심 문장)</label><input type="text" data-b="o.${n}.s"></div>
+   <div><label>근거 (키워드·수치)</label><textarea data-b="o.${n}.k" style="min-height:3.2rem"></textarea>${bchips(n)}</div></div>${extra||''}</div>`;};
+  const sel=S.o[3].cards;
+  const lim=`<div class="limits">${Object.keys(LIMIT_DEF).map(c=>`<div class="lcard ${sel.includes(c)?'sel':''}" id="lc_${c}" onclick="this.classList.toggle('flip')"><div class="lin">
+     <div class="lf">${c}<small>${LIMIT_DEF[c]}</small><small style="margin-top:.4rem">눌러서 뒤집기</small></div>
+     <div class="lb2"><b>${c}</b>${LIMIT_DEF[c]}<div style="margin-top:.3rem">🔎 ${esc(LIMIT_EX[d.id][c])}</div>
+     <button class="mini" style="margin-top:.4rem" onclick="event.stopPropagation();pickCard('${c}')">${sel.includes(c)?'✔ 고름':'이 카드 고르기'}</button></div></div></div>`).join('')}</div>
+   <div><label>더 본 자료가 있다면 (그 자료에 의하면 ~)</label><input type="text" data-b="o.3.more" placeholder="예) 다른 자료에 의하면…"></div>`;
+  const filled=[1,2,3].every(n=>S.o[n].s.trim());
+  const concl=`<div class="cmp"><span>논제 고를 때 내 첫 생각: <b>${first||'(안 정함)'}</b></span>
+     <span class="row pick">지금 나의 결론: <button class="pro ${S.o[4].final==='찬성'?'on':''}" onclick="setFinal('찬성')">찬성</button><button class="con ${S.o[4].final==='반대'?'on':''}" onclick="setFinal('반대')">반대</button></span></div>
+     ${filled?'':'<div class="warn">1~3문단 개요문을 먼저 쓰고 결론을 정해 봐요.</div>'}
+     ${first&&S.o[4].final&&first!==S.o[4].final?'<div class="muted">💡 생각이 바뀌었네요! 무엇 때문에 바뀌었는지 결론에 써 보세요.</div>':''}`;
+  return `<div class="card"><h2>🧭 개요 짜기</h2><div class="ref"><b>나의 논제</b> ${esc(t)}<br><span class="muted">자료 ${d.id}번 — ${esc(vlabel(d,d.x))}와(과) ${esc(vlabel(d,d.y))}</span></div>
+    <p class="lead">짝 인터뷰: 내가 말로 답하면 짝이 키워드를 받아 적어 주고, 그걸 보고 한 줄 개요문을 써요.</p>
+    ${S.think?`<div class="muted">논제 고를 때 쓴 생각: “${esc(S.think)}”</div>`:''}</div>
+   ${P(1)}
+   ${P(2,`<div class="fields" style="margin-top:.5rem"><div><label>상관계수</label><input type="text" data-b="o.2.r" placeholder="예) -0.55"></div><div><label>대푯값</label><input type="text" data-b="o.2.rep" placeholder="예) OECD 중앙값 ○○"></div></div>`)}
+   ${P(3,lim)}
+   ${P(4,concl)}
+   ${aiPanel('outline')}
+   ${aiBox('outline')}`;
+}
+function insertBasket(n,i){const k=S.o[n].k;S.o[n].k=(k?k+'\n':'')+S.basket[i];save();const el=document.querySelector(`[data-b="o.${n}.k"]`);if(el)el.value=S.o[n].k;toast('근거 칸에 넣었어요');}
+function pickCard(c){const a=S.o[3].cards,i=a.indexOf(c);if(i>=0)a.splice(i,1);else a.push(c);save();const el=document.getElementById('lc_'+c);el.classList.toggle('sel');el.querySelector('button').textContent=a.includes(c)?'✔ 고름':'이 카드 고르기';}
+function setFinal(v){S.o[4].final=v;save();render();}
+
+/* ---------- 5. 근거문 쓰기 ---------- */
+const CHECKS={
+ 1:[['논제를 밝혔나',t=>t.length>15&&/논제|해야|할까|한다/.test(t)],['무엇과 무엇의 관계인지 썼나',t=>/관계|와\s|과\s/.test(t)]],
+ 2:[['수치가 들어갔나',t=>/\d/.test(t)],['상관(양·음·없음)을 말했나',t=>/상관|양의|음의|관계가 (거의 )?없/.test(t)],['대푯값·산포도를 썼나',t=>/평균|중앙값|최빈값|표준편차|분산|흩어|퍼져/.test(t)]],
+ 3:[['이유를 밝혔나',t=>/왜냐하면|때문/.test(t)],['한계 카드 내용을 썼나',t=>/대표|특이점|빼|원인|인과|평균을|한 사람|나라 전체|자료가 (더 )?필요|그 자료에/.test(t)]],
+ 4:[['찬성/반대를 밝혔나',t=>/찬성|반대/.test(t)],['조건이나 생각의 변화를 썼나',t=>/단,|다만|처음에는|하지만|그러나/.test(t)]]
+};
+function viewEssay(){
+  const t=topicText();
+  return `<div class="card"><h2>✍️ 개요문 + 근거문으로 쓰기</h2><p class="lead">문단마다 <b>개요문(중심 문장) 1개</b>를 쓰고, <b>근거문(수치·그래프·자료로 뒷받침하는 문장)</b>을 이어 써요. 문장 틀을 누르면 넣어지고, 빈칸(______, ( ))을 내 말로 채워요.</p>
+   <div class="ref"><b>나의 논제</b> ${esc(t)}</div></div>
+   ${PARAS.map(p=>`<div class="card para"><h3><span class="pnum">${p.n}</span>${p.name}</h3>
+     <div class="ref"><b>개요문</b> ${esc(S.o[p.n].s)||'<span class="warn">개요에서 아직 안 썼어요</span>'}<br><b>근거</b> ${esc(S.o[p.n].k).replace(/\n/g,' / ')||'-'}
+      ${p.n===2&&(S.o[2].r||S.o[2].rep)?`<br><b>상관계수</b> ${esc(S.o[2].r)} · <b>대푯값</b> ${esc(S.o[2].rep)}`:''}${p.n===3&&S.o[3].cards.length?`<br><b>고른 한계 카드</b> ${S.o[3].cards.join(', ')}${S.o[3].more?' · '+esc(S.o[3].more):''}`:''}${p.n===4&&S.o[4].final?`<br><b>결론</b> ${S.o[4].final}`:''}</div>
+     <div class="frames">${p.frames.map((f,i)=>`<button class="frame" onclick="insFrame(${p.n},${i})">＋ ${esc(f.replace('{논제}',t))}</button>`).join('')}</div>
+     ${S.o[p.n].s?`<button class="mini" onclick="insOutline(${p.n})">＋ 내 개요문 넣기</button>`:''}
+     <textarea data-b="e.${p.n}" data-live="liveCheck" data-n="${p.n}" style="min-height:7rem;margin-top:.4rem" placeholder="개요문으로 시작하고, 근거문을 이어 써요."></textarea>
+     <div class="checks" id="ck${p.n}"></div></div>`).join('')}
+   ${aiPanel('essay')}
+   ${aiBox('essay')}`;
+}
+function insFrame(n,i){const f=PARAS[n-1].frames[i].replace('{논제}',topicText());S.e[n]=(S.e[n]?S.e[n].replace(/\s*$/,' '):'')+f;save();const el=document.querySelector(`[data-b="e.${n}"]`);el.value=S.e[n];liveCheck(el);el.focus();}
+function insOutline(n){S.e[n]=(S.e[n]?S.e[n].replace(/\s*$/,' '):'')+S.o[n].s;save();const el=document.querySelector(`[data-b="e.${n}"]`);el.value=S.e[n];liveCheck(el);}
+function liveCheck(el){const n=+el.dataset.n,t=el.value;const blanks=/_{3,}|\(\s*\)/.test(t);
+  document.getElementById('ck'+n).innerHTML=CHECKS[n].map(([l,f])=>`<span class="ck ${f(t)?'ok':''}">${f(t)?'✔':'○'} ${l}</span>`).join('')+(blanks?'<span class="ck" style="background:#fdeaea;color:#c2512f">빈칸이 남아 있어요</span>':'')+`<span class="ck">${t.replace(/\s/g,'').length}자</span>`;}
+
+/* ---------- 6. 완성 ---------- */
+const SELF=[
+ ['대푯값(또는 산포도)이 우리 자료를 어떻게 대표하는지 썼다. (수치 차이만 쓰지 않기)','[9수05-01] 대푯값과 산포도의 의미'],
+ ['산점도를 근거로 두 변수의 관계(양·음·없음)를 말했다.','[9수05-02] 산점도, 상관관계'],
+ ['통계 결과를 논제와 연결해 결론을 내고, 자료로 말할 수 있는 범위(한계)를 밝혔다.','통계는 합리적 의사 결정에 활용된다']
+];
+function fullText(){return [1,2,3,4].map(n=>S.e[n].trim()).filter(Boolean).join('\n\n');}
+function viewDone(){
+  const txt=fullText(),len=txt.replace(/\s/g,'').length,I=S.info;
+  const blanks=/_{3,}|\(\s*\)/.test(txt);
+  return `<div class="card"><h2>🎉 완성된 나의 글</h2>
+   <div class="ref"><b>논제</b> ${esc(topicText())}  ·  <b>나의 결론</b> ${S.o[4].final||'-'}</div>
+   <div class="essay-out">${esc(txt)||'<span class="muted">아직 쓴 글이 없어요. 5단계에서 써 봐요.</span>'}</div>
+   <div class="row" style="margin-top:.6rem;justify-content:space-between"><span class="count">${len}자 <span class="muted">(공백 빼고 · 한 쪽을 넘지 않게)</span></span>
+    <span class="row"><button onclick="copyText(fullText())">복사하기</button><button onclick="dlTxt()">파일로 저장</button><button class="fill" onclick="doPrint()">인쇄하기</button></span></div>
+   ${blanks?'<div class="warn" style="margin-top:.3rem">⚠ 아직 채우지 않은 빈칸(______ 또는 ( ))이 있어요.</div>':''}
+  </div>
+  <div class="card"><h2>✅ 스스로 점검</h2><p class="lead">이번 단원에서 배운 것을 글에서 썼나요?</p>
+   <table><tr><th>점검 내용</th><th>근거 (성취기준)</th><th>✔</th></tr>
+   ${SELF.map((s,i)=>`<tr><td class="l">${s[0]}</td><td>${s[1]}</td><td><input type="checkbox" style="width:1.4rem;height:1.4rem" ${S.self[i]?'checked':''} onchange="S.self[${i}]=this.checked;save()"></td></tr>`).join('')}</table>
+   ${aiPanel('essay')}
+   <p class="muted" style="margin-top:.6rem">정리 시간: 친구들의 논의를 듣고, 다음 시간에 고치고 싶은 문장을 생각해 봐요.</p></div>`;
+}
+function dlTxt(){const I=S.info;const b=new Blob([`${I.ban}반 ${I.no}번 ${I.name}\n논제: ${topicText()}\n\n${fullText()}`],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`나의의견_${I.ban}반${I.no}번_${I.name||'이름'}.txt`;a.click();}
+function doPrint(){const I=S.info;document.getElementById('printArea').innerHTML=`<h1>통계로 말하는 나의 의견</h1><div>${esc(I.ban)}반 ${esc(I.no)}번 이름: ${esc(I.name)} · 자료 ${S.ds}번</div><div><b>논제</b> ${esc(topicText())}</div><hr>${[1,2,3,4].map(n=>`<div class="pp">${esc(S.e[n])}</div>`).join('')}`;window.print();}
+
+/* ---------- 시작 ---------- */
+document.documentElement.style.fontSize=(S.fs||22)+'px';
+render();
+</script>
+</body>
+</html>
